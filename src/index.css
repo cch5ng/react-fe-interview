@@ -7,3 +7,19 @@ body {
 .p-left {
 	text-align: left;
 }
+
+/* form */
+
+label {
+	margin-right: 8px;
+}
+
+.div-question {
+	margin-bottom: 8px;
+}
+
+input {
+	padding-left: 15px;
+	border-radius: 5px;
+	border: solid 1px #666;
+}

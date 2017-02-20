@@ -122,22 +122,23 @@ class App extends Component {
     var randomQuestionsList =  this.renderRandomQuestions();
 
     return (
-      <div className="container-fluid">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+      <div>
+        <div className="App-header center">
+          <h2>Front End Interview Questions</h2>
         </div>
-        <div>
-          <h3>Random Interview Questions</h3>
-          <form className="p-left">
-            {questionsInputList}
-          </form>
-        </div>
-        <p className="center">
-          <Button className="button" onClick={this.handleRandomButton}>Get Random Questions</Button>
-          <Button className="button" onClick={this.handleAllButton}>All Questions</Button>
-        </p>
-        {this.state.display === 'all' ? questionsList : randomQuestionsList}
+        <main className="container-fluid">
+          <div>
+            <h3>Random Interview Questions</h3>
+            <form className="p-left">
+              {questionsInputList}
+            </form>
+          </div>
+          <p className="center">
+            <Button className="button" onClick={this.handleRandomButton}>Get Random Questions</Button>
+            <Button className="button" onClick={this.handleAllButton}>All Questions</Button>
+          </p>
+          {this.state.display === 'all' ? questionsList : randomQuestionsList}
+        </main>
       </div>
     );
   }

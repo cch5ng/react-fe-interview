@@ -1,5 +1,6 @@
 { "questions": [
 	{
+		"id": "generalQuestions",
 		"category": "General Questions",
 		"question_list": [
 			"What did you learn yesterday/this week?",
@@ -24,6 +25,7 @@
 			"What does CORS stand for and what issue does it address?"
 		]
 	}, {
+		"id": "htmlQuestions",
 		"category": "HTML Questions",
 		"question_list": [
 			"What does a `doctype` do?",
@@ -41,6 +43,7 @@
 			"Have you used different HTML templating languages before?"
 		]
 	}, {
+		"id": "cssQuestions",
 		"category": "CSS Questions",
 		"question_list": [
 			"What is the difference between classes and IDs in CSS?",
@@ -77,6 +80,7 @@
 			"Is there any reason you'd want to use `translate()` instead of *absolute positioning*, or vice-versa? And why?"
 		]
 	}, {
+		"id": "jsQuestions",
 		"category": "JS Questions",
 		"question_list": [
 			"Explain event delegation",
@@ -125,6 +129,7 @@
 			"Explain the differences on the usage of `foo` between `function foo() {}` and `var foo = function() {}`"
 		]
 	}, {
+		"id": "testingQuestions",
 		"category": "Testing Questions",
 		"question_list": [
 			"What are some advantages/disadvantages to testing your code?",
@@ -133,6 +138,7 @@
 			"What is the purpose of a code style linting tool?"
 		]
 	}, {
+		"id": "performanceQuestions",
 		"category": "Performance Questions",
 		"question_list": [
 			"What tools would you use to find a performance bug in your code?",
@@ -140,6 +146,7 @@
 			"Explain the difference between layout, painting and compositing."
 		]
 	}, {
+		"id": "networkQuestions",
 		"category": "Network Questions",
 		"question_list": [
 			"Traditionally, why has it been better to serve site assets from multiple domains?",

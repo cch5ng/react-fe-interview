@@ -23,3 +23,15 @@ input {
 	border-radius: 5px;
 	border: solid 1px #666;
 }
+
+.button {
+	margin: 0 3px;
+}
+
+button.btn-default {
+	border-color: #666;
+}
+
+.center {
+	text-align: center;
+}

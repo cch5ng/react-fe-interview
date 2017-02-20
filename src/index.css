@@ -8,6 +8,16 @@ body {
 	text-align: left;
 }
 
+.App-header {
+	background-color: #1B1378;
+	height: 75px;
+}
+
+h2 {
+	margin-top: 12px;
+	margin-bottom: 12px;
+}
+
 /* form */
 
 label {

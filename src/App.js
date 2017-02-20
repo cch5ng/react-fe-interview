@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
-import logo from './logo.svg';
+import { Button } from 'react-bootstrap';
 import './App.css';
 import h5bp_interview from './utilities/h5bp_interview.json';
 import { getRandomIndexList } from './utilities';
@@ -88,7 +87,6 @@ class App extends Component {
 
   render() {
     var questionsInputList = h5bp_interview.questions.map((questionSet, idx) => {
-      var id = questionSet.id;
       var max = h5bp_interview.questions[idx].question_list.length;
       return (
         <div className="div-question">

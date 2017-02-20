@@ -3,29 +3,87 @@ import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import logo from './logo.svg';
 import './App.css';
 import h5bp_interview from './utilities/h5bp_interview.json';
+import { getRandomIndexList } from './utilities';
 
 class App extends Component {
   constructor(props) {
     super(props);
 
-    var maxQuestionsObj = {};
-    h5bp_interview.questions.forEach(function(questionType) {
-      maxQuestionsObj[questionType.id] = questionType.question_list.length;
-    });
-    maxQuestionsObj.display = 'all';
-    this.state = maxQuestionsObj;
-    //console.log('this.state.generalQuestions: ' + this.state.generalQuestions);
-
     this.handleChange = this.handleChange.bind(this);
     this.handleRandomButton = this.handleRandomButton.bind(this);
     this.handleAllButton = this.handleAllButton.bind(this);
+    this.renderRandomQuestions = this.renderRandomQuestions.bind(this);
+    this.renderQuestions = this.renderQuestions.bind(this);
+    this.getMaxCountObj = this.getMaxCountObj.bind(this);
+
+    var maxQuestionsObj = this.getMaxCountObj();
+    maxQuestionsObj.display = 'all';
+    this.state = maxQuestionsObj;
   }
 
+  // EVENT HANDLERS
   handleChange(e) {
-    console.log('e.target.id: ' + e.target.id);
     var inputState = {};
     inputState[e.target.id] = e.target.value;
     this.setState(inputState);
+  }
+
+  handleRandomButton() {
+    this.setState({
+      display: 'random'
+    });
+  }
+
+  handleAllButton() {
+    var maxQuestionsObj = this.getMaxCountObj();
+    maxQuestionsObj.display = 'all';
+
+    this.setState(maxQuestionsObj);
+  }
+
+  // RENDER
+  renderRandomQuestions() {
+    //console.log('renderRandomQuestions');
+    var randomIdxList;
+    var questionsList = h5bp_interview.questions.map((questionSet, idx) => {
+      randomIdxList = getRandomIndexList(questionSet.id, this.state[questionSet.id]);
+      var randomQuestions = this.renderQuestions(idx, randomIdxList);
+      //console.log('randomIdxList: ' + randomIdxList);
+      return (
+        <div>
+          <h4>{questionSet.category}</h4>
+          <ul>
+            {randomQuestions}
+          </ul>
+        </div>
+      )
+    });
+
+    return questionsList;
+  }
+
+  renderQuestions(idxCategory, idxList) {
+    var list;
+    //console.log('idxList: ' + idxList);
+    if (idxList) {
+      list = idxList.map((idx) => {
+        return (
+          <li>{h5bp_interview.questions[idxCategory].question_list[idx]}</li>
+        )
+      })
+    }
+
+    return list;
+  }
+
+  // HELPER
+  getMaxCountObj() {
+    var maxQuestionsObj = {};
+
+    h5bp_interview.questions.forEach(function(questionType) {
+      maxQuestionsObj[questionType.id] = questionType.question_list.length;
+    });
+    return maxQuestionsObj;
   }
 
   render() {
@@ -61,8 +119,10 @@ class App extends Component {
         ) 
     });
 
+    var randomQuestionsList =  this.renderRandomQuestions();
+
     return (
-      <div className="App container-fluid">
+      <div className="container-fluid">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
@@ -73,11 +133,11 @@ class App extends Component {
             {questionsInputList}
           </form>
         </div>
-        <p className="">
-          <Button onChange={this.handleRandomButton}>Get Random Questions</Button>
-          <Button onChange={this.handleAllButton}>All Questions</Button>
+        <p className="center">
+          <Button className="button" onClick={this.handleRandomButton}>Get Random Questions</Button>
+          <Button className="button" onClick={this.handleAllButton}>All Questions</Button>
         </p>
-        {questionsList}
+        {this.state.display === 'all' ? questionsList : randomQuestionsList}
       </div>
     );
   }

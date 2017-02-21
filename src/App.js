@@ -151,9 +151,6 @@ class App extends Component {
         ) 
     });
 
-    //var randomQuestionsList =  this.renderRandomQuestions();
-    //console.log('randomQuestionsList.length: ' + randomQuestionsList.length);
-
     return (
       <div>
         <div className="App-header center">

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
+import uuid from 'node-uuid';
 import './App.css';
 import h5bp_interview from './utilities/h5bp_interview.json';
 import { getRandomIndexList } from './utilities';
@@ -21,18 +22,35 @@ class App extends Component {
   }
 
   // EVENT HANDLERS
+  /**
+   * @param {event}
+   * @return {}
+   * Event handler for input field update (number change)
+   */
   handleChange(e) {
     var inputState = {};
     inputState[e.target.id] = e.target.value;
     this.setState(inputState);
   }
 
+  /**
+   * @param {}
+   * @return {}
+   * Event handler for button click (Get Random Questions)
+   */
   handleRandomButton() {
     this.setState({
       display: 'random'
     });
   }
 
+  /**
+   * @param {}
+   * @return {}
+   * Event handler for button click (All Questions)
+   * also works like a Clear button where all of the input values
+   * are reset to the total number of questions per category
+   */
   handleAllButton() {
     var maxQuestionsObj = this.getMaxCountObj();
     maxQuestionsObj.display = 'all';
@@ -41,6 +59,12 @@ class App extends Component {
   }
 
   // RENDER
+  /**
+   * @param {}
+   * @return {string} HTML
+   * Iterates over the list of list of questions and renders
+   * the question category
+   */
   renderRandomQuestions() {
     //console.log('renderRandomQuestions');
     var randomIdxList;
@@ -61,13 +85,18 @@ class App extends Component {
     return questionsList;
   }
 
+  /**
+   * @param {}
+   * @return {}
+   *
+   */
   renderQuestions(idxCategory, idxList) {
     var list;
     //console.log('idxList: ' + idxList);
     if (idxList) {
       list = idxList.map((idx) => {
         return (
-          <li>{h5bp_interview.questions[idxCategory].question_list[idx]}</li>
+          <li key={uuid.v1()}>{h5bp_interview.questions[idxCategory].question_list[idx]}</li>
         )
       })
     }
@@ -76,6 +105,11 @@ class App extends Component {
   }
 
   // HELPER
+  /**
+   * @param {}
+   * @return {}
+   *
+   */
   getMaxCountObj() {
     var maxQuestionsObj = {};
 
@@ -89,7 +123,7 @@ class App extends Component {
     var questionsInputList = h5bp_interview.questions.map((questionSet, idx) => {
       var max = h5bp_interview.questions[idx].question_list.length;
       return (
-        <div className="div-question">
+        <div key={uuid.v1()} className="div-question">
           <label className="label-question">Number of {questionSet.category}</label>
           <input type="number"
             id={questionSet.id} className="input-question"
@@ -106,18 +140,19 @@ class App extends Component {
 
     var questionsList = h5bp_interview.questions.map(function(questionSet) {
       return (
-        <div className="p-left">
+        <div key={uuid.v1()} className="p-left">
           <h4>{questionSet.category}</h4>
           <ul>
             {questionSet.question_list.map(function(question) {
-              return <li>{question}</li>
+              return <li key={uuid.v1()}>{question}</li>
             })}
           </ul>
           </div>
         ) 
     });
 
-    var randomQuestionsList =  this.renderRandomQuestions();
+    //var randomQuestionsList =  this.renderRandomQuestions();
+    //console.log('randomQuestionsList.length: ' + randomQuestionsList.length);
 
     return (
       <div>
@@ -135,7 +170,7 @@ class App extends Component {
             <Button className="button" onClick={this.handleRandomButton}>Get Random Questions</Button>
             <Button className="button" onClick={this.handleAllButton}>All Questions</Button>
           </p>
-          {this.state.display === 'all' ? questionsList : randomQuestionsList}
+          {this.state.display === 'all' ? questionsList : this.renderRandomQuestions()}
         </main>
       </div>
     );

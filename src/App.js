@@ -86,8 +86,9 @@ class App extends Component {
   }
 
   /**
-   * @param {}
-   * @return {}
+   * @param {int} index for particular category of questions in h5bp_interview.json
+   * @param {[int]} list of index values
+   * @return {string} HTML list of random questions by index values
    *
    */
   renderQuestions(idxCategory, idxList) {

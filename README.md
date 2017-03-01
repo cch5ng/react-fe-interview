@@ -6,6 +6,10 @@
 
 * This project's text content was sourced from the [h5bp repo, Front-end Developer Interview Questions](https://github.com/h5bp/Front-end-Developer-Interview-Questions/blob/master/README.md) with [MIT license](https://github.com/h5bp/Front-end-Developer-Interview-Questions/blob/master/LICENSE.md)
 
+### Dependencies
+
+Using node v6.9.2 (via nvm)
+
 ===
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).

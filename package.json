@@ -19,5 +19,5 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "homepage": "http://www.carolchung.com/react-frontend-interview2",
+  "homepage": "http://cch5ng.github.io/react-frontend-interview2",
 }

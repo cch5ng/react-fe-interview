@@ -10,6 +10,16 @@
 
 Using node v6.9.2 (via nvm)
 
+### Running the Application
+
+If you have python installed, from the terminal:
+
+* Navigate to the /build directory
+* Type `python SimpleHTTPServer`
+* From a browser, enter `http://localhost:8000` 
+*Note that if you are running a server with port 8000, then just specify another port number when starting the server*
+`python SimpleHTTPServer 9999`
+
 ===
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).

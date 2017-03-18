@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
 import uuid from 'node-uuid';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import './App.css';
 import h5bp_interview from './utilities/h5bp_interview.json';
 import { getRandomIndexList } from './utilities';
@@ -59,9 +60,22 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <div className="App-header center">
-            <h2>Front End Interview Questions</h2>
-          </div>
+          <Navbar className="App-header" collapseOnSelect>
+            <Navbar.Header>
+              <Navbar.Brand>
+                <a href="#">Front End Interview Questions</a>
+              </Navbar.Brand>
+              <Navbar.Toggle />
+            </Navbar.Header>
+            <Navbar.Collapse>
+              <Nav pullRight>
+                <NavItem eventKey={1} href="#">Random</NavItem>
+                <NavItem eventKey={2} href="#">All Questions</NavItem>
+                <NavItem eventKey={3} href="#">Save List</NavItem>
+                <NavItem eventKey={4} href="#">Favorites</NavItem>
+              </Nav>
+            </Navbar.Collapse>
+          </Navbar>
           <main className="container-fluid">
             <div>
               <h3>Random Interview Questions</h3>

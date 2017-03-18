@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
 import uuid from 'node-uuid';
-//import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-//import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import '../App.css';
 import h5bp_interview from '../utilities/h5bp_interview.json';
 import { getRandomIndexList } from '../utilities';
@@ -12,12 +10,10 @@ class RandomQuestions extends Component {
     super(props);
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleRandomButton = this.handleRandomButton.bind(this);
     this.handleClearButton = this.handleClearButton.bind(this);
     this.renderRandomQuestions = this.renderRandomQuestions.bind(this);
     this.renderQuestions = this.renderQuestions.bind(this);
     this.getMaxCountObj = this.getMaxCountObj.bind(this);
-    //this.handleKeys = this.handleKeys.bind(this);
 
     var maxQuestionsObj = this.getMaxCountObj();
     maxQuestionsObj.display = 'all';
@@ -53,7 +49,7 @@ class RandomQuestions extends Component {
           </form>
         </div>
         <p className="center">
-          <Button className="button" onClick={this.handleRandomButton}>Get Random Questions</Button>
+          
           <Button className="button" onClick={this.handleClearButton}>Clear</Button>
         </p>
         {this.renderRandomQuestions()}
@@ -68,65 +64,18 @@ class RandomQuestions extends Component {
    * Event handler for input field update (number change)
    */
   handleChange(e) {
-    console.log('gets to handleChange');
-    console.log('keyCode: ' + e.keyCode);
-    console.log('e.target.value: ' + e.target.value);
     var inputState = {};
 
-    //e.preventDefault();
-    //if (e.key === 'Enter' && e.target.value.length > 1) { // 
-      inputState[e.target.id] = e.target.value;
-      this.setState(inputState);
-    //} else if (e.key === 'Backspace' && e.target.value.length === 0 ) {
-    //  inputState[e.target.id] = e.target.value;
-    //  this.setState(inputState);
-    //}
-  }
-
-  /**
-   * @param {event}
-   * @return {}
-   * Event handler for input field update (number change)
-   */
-  // handleKeys(e) {
-  //   console.log('gets to handleChange');
-  //   console.log('keyCode: ' + e.keyCode);
-  //   console.log('key: ' + e.key);
-  //   console.log('e.target.value: ' + e.target.value);
-  //   console.log('e.target.id: ' + e.target.id);
-    
-    // var inputState = {};
-
-    // inputState[e.target.id] = e.target.value;
-    // this.setState(inputState);
-
-
-    //e.preventDefault();
-    //if (e.key === 'Enter' && e.target.value.length > 1) { 
-    //} else if (e.key === 'Backspace') {
-     //inputState[e.target.id] = 1;
-     //this.setState(inputState);
-    //}
-  //}
-
-
-  /**
-   * @param {}
-   * @return {}
-   * Event handler for button click (Get Random Questions)
-   */
-  handleRandomButton() {
-    this.setState({
-      display: 'random'
-    });
+    inputState[e.target.id] = e.target.value;
+    this.setState(inputState);
   }
 
   /**
    * @param {}
    * @return {}
-   * Event handler for button click (All Questions)
-   * also works like a Clear button where all of the input values
-   * are reset to the total number of questions per category
+   * Event handler for button click (Clear)
+   * resets all of the input values
+   * to the total number of questions per category
    */
   handleClearButton() {
     var maxQuestionsObj = this.getMaxCountObj();
@@ -168,7 +117,6 @@ class RandomQuestions extends Component {
    */
   renderQuestions(idxCategory, idxList) {
     var list;
-    //console.log('idxList: ' + idxList);
     if (idxList) {
       list = idxList.map((idx) => {
         return (

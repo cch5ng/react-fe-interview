@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
 import uuid from 'node-uuid';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import './App.css';
 import h5bp_interview from './utilities/h5bp_interview.json';
 import { getRandomIndexList } from './utilities';
@@ -19,6 +20,64 @@ class App extends Component {
     var maxQuestionsObj = this.getMaxCountObj();
     maxQuestionsObj.display = 'all';
     this.state = maxQuestionsObj;
+  }
+
+
+
+  render() {
+    var questionsInputList = h5bp_interview.questions.map((questionSet, idx) => {
+      var max = h5bp_interview.questions[idx].question_list.length;
+      return (
+        <div key={uuid.v1()} className="div-question">
+          <label className="label-question">Number of {questionSet.category}</label>
+          <input type="number"
+            id={questionSet.id} className="input-question"
+            min="0"
+            max={max}
+            step="1"
+            value={this.state[questionSet.id]}
+            placeholder={max}
+            onChange={this.handleChange}
+          />
+        </div>
+      )
+    });
+
+    var questionsList = h5bp_interview.questions.map(function(questionSet) {
+      return (
+        <div key={uuid.v1()} className="p-left">
+          <h4>{questionSet.category}</h4>
+          <ul>
+            {questionSet.question_list.map(function(question) {
+              return <li key={uuid.v1()}>{question}</li>
+            })}
+          </ul>
+          </div>
+        ) 
+    });
+
+    return (
+      <Router>
+        <div>
+          <div className="App-header center">
+            <h2>Front End Interview Questions</h2>
+          </div>
+          <main className="container-fluid">
+            <div>
+              <h3>Random Interview Questions</h3>
+              <form className="p-left">
+                {questionsInputList}
+              </form>
+            </div>
+            <p className="center">
+              <Button className="button" onClick={this.handleRandomButton}>Get Random Questions</Button>
+              <Button className="button" onClick={this.handleAllButton}>All Questions</Button>
+            </p>
+            {this.state.display === 'all' ? questionsList : this.renderRandomQuestions()}
+          </main>
+        </div>
+      </Router>
+    );
   }
 
   // EVENT HANDLERS
@@ -118,60 +177,6 @@ class App extends Component {
       maxQuestionsObj[questionType.id] = questionType.question_list.length;
     });
     return maxQuestionsObj;
-  }
-
-  render() {
-    var questionsInputList = h5bp_interview.questions.map((questionSet, idx) => {
-      var max = h5bp_interview.questions[idx].question_list.length;
-      return (
-        <div key={uuid.v1()} className="div-question">
-          <label className="label-question">Number of {questionSet.category}</label>
-          <input type="number"
-            id={questionSet.id} className="input-question"
-            min="0"
-            max={max}
-            step="1"
-            value={this.state[questionSet.id]}
-            placeholder={max}
-            onChange={this.handleChange}
-          />
-        </div>
-      )
-    });
-
-    var questionsList = h5bp_interview.questions.map(function(questionSet) {
-      return (
-        <div key={uuid.v1()} className="p-left">
-          <h4>{questionSet.category}</h4>
-          <ul>
-            {questionSet.question_list.map(function(question) {
-              return <li key={uuid.v1()}>{question}</li>
-            })}
-          </ul>
-          </div>
-        ) 
-    });
-
-    return (
-      <div>
-        <div className="App-header center">
-          <h2>Front End Interview Questions</h2>
-        </div>
-        <main className="container-fluid">
-          <div>
-            <h3>Random Interview Questions</h3>
-            <form className="p-left">
-              {questionsInputList}
-            </form>
-          </div>
-          <p className="center">
-            <Button className="button" onClick={this.handleRandomButton}>Get Random Questions</Button>
-            <Button className="button" onClick={this.handleAllButton}>All Questions</Button>
-          </p>
-          {this.state.display === 'all' ? questionsList : this.renderRandomQuestions()}
-        </main>
-      </div>
-    );
   }
 }
 

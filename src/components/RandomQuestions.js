@@ -17,6 +17,7 @@ class RandomQuestions extends Component {
     this.renderRandomQuestions = this.renderRandomQuestions.bind(this);
     this.renderQuestions = this.renderQuestions.bind(this);
     this.getMaxCountObj = this.getMaxCountObj.bind(this);
+    //this.handleKeys = this.handleKeys.bind(this);
 
     var maxQuestionsObj = this.getMaxCountObj();
     maxQuestionsObj.display = 'all';
@@ -26,8 +27,9 @@ class RandomQuestions extends Component {
   render() {
     var questionsInputList = h5bp_interview.questions.map((questionSet, idx) => {
       var max = h5bp_interview.questions[idx].question_list.length;
+      let key = `input-${idx}`;
       return (
-        <div key={uuid.v1()} className="div-question">
+        <div key={key} className="div-question">
           <label className="label-question">Number of {questionSet.category}</label>
           <input type="number"
             id={questionSet.id} className="input-question"
@@ -41,19 +43,6 @@ class RandomQuestions extends Component {
         </div>
       )
     });
-
-    // var questionsList = h5bp_interview.questions.map(function(questionSet) {
-    //   return (
-    //     <div key={uuid.v1()} className="p-left">
-    //       <h4>{questionSet.category}</h4>
-    //       <ul>
-    //         {questionSet.question_list.map(function(question) {
-    //           return <li key={uuid.v1()}>{question}</li>
-    //         })}
-    //       </ul>
-    //       </div>
-    //     ) 
-    // });
 
     return (
       <div>
@@ -79,10 +68,47 @@ class RandomQuestions extends Component {
    * Event handler for input field update (number change)
    */
   handleChange(e) {
+    console.log('gets to handleChange');
+    console.log('keyCode: ' + e.keyCode);
+    console.log('e.target.value: ' + e.target.value);
     var inputState = {};
-    inputState[e.target.id] = e.target.value;
-    this.setState(inputState);
+
+    //e.preventDefault();
+    //if (e.key === 'Enter' && e.target.value.length > 1) { // 
+      inputState[e.target.id] = e.target.value;
+      this.setState(inputState);
+    //} else if (e.key === 'Backspace' && e.target.value.length === 0 ) {
+    //  inputState[e.target.id] = e.target.value;
+    //  this.setState(inputState);
+    //}
   }
+
+  /**
+   * @param {event}
+   * @return {}
+   * Event handler for input field update (number change)
+   */
+  // handleKeys(e) {
+  //   console.log('gets to handleChange');
+  //   console.log('keyCode: ' + e.keyCode);
+  //   console.log('key: ' + e.key);
+  //   console.log('e.target.value: ' + e.target.value);
+  //   console.log('e.target.id: ' + e.target.id);
+    
+    // var inputState = {};
+
+    // inputState[e.target.id] = e.target.value;
+    // this.setState(inputState);
+
+
+    //e.preventDefault();
+    //if (e.key === 'Enter' && e.target.value.length > 1) { 
+    //} else if (e.key === 'Backspace') {
+     //inputState[e.target.id] = 1;
+     //this.setState(inputState);
+    //}
+  //}
+
 
   /**
    * @param {}
@@ -122,7 +148,7 @@ class RandomQuestions extends Component {
       randomIdxList = getRandomIndexList(questionSet.id, this.state[questionSet.id]);
       var randomQuestions = this.renderQuestions(idx, randomIdxList);
       return (
-        <div>
+        <div key={uuid.v1()}>
           <h4>{questionSet.category}</h4>
           <ul>
             {randomQuestions}

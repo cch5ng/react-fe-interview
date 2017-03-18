@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
 import uuid from 'node-uuid';
-//import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-//import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import '../App.css';
 import h5bp_interview from '../utilities/h5bp_interview.json';
 import { getRandomIndexList } from '../utilities';
@@ -12,7 +10,6 @@ class RandomQuestions extends Component {
     super(props);
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleRandomButton = this.handleRandomButton.bind(this);
     this.handleClearButton = this.handleClearButton.bind(this);
     this.renderRandomQuestions = this.renderRandomQuestions.bind(this);
     this.renderQuestions = this.renderQuestions.bind(this);
@@ -26,8 +23,9 @@ class RandomQuestions extends Component {
   render() {
     var questionsInputList = h5bp_interview.questions.map((questionSet, idx) => {
       var max = h5bp_interview.questions[idx].question_list.length;
+      let key = `input-${idx}`;
       return (
-        <div key={uuid.v1()} className="div-question">
+        <div key={key} className="div-question">
           <label className="label-question">Number of {questionSet.category}</label>
           <input type="number"
             id={questionSet.id} className="input-question"
@@ -42,19 +40,6 @@ class RandomQuestions extends Component {
       )
     });
 
-    // var questionsList = h5bp_interview.questions.map(function(questionSet) {
-    //   return (
-    //     <div key={uuid.v1()} className="p-left">
-    //       <h4>{questionSet.category}</h4>
-    //       <ul>
-    //         {questionSet.question_list.map(function(question) {
-    //           return <li key={uuid.v1()}>{question}</li>
-    //         })}
-    //       </ul>
-    //       </div>
-    //     ) 
-    // });
-
     return (
       <div>
         <div>
@@ -64,7 +49,7 @@ class RandomQuestions extends Component {
           </form>
         </div>
         <p className="center">
-          <Button className="button" onClick={this.handleRandomButton}>Get Random Questions</Button>
+          
           <Button className="button" onClick={this.handleClearButton}>Clear</Button>
         </p>
         {this.renderRandomQuestions()}
@@ -80,6 +65,7 @@ class RandomQuestions extends Component {
    */
   handleChange(e) {
     var inputState = {};
+
     inputState[e.target.id] = e.target.value;
     this.setState(inputState);
   }
@@ -87,20 +73,9 @@ class RandomQuestions extends Component {
   /**
    * @param {}
    * @return {}
-   * Event handler for button click (Get Random Questions)
-   */
-  handleRandomButton() {
-    this.setState({
-      display: 'random'
-    });
-  }
-
-  /**
-   * @param {}
-   * @return {}
-   * Event handler for button click (All Questions)
-   * also works like a Clear button where all of the input values
-   * are reset to the total number of questions per category
+   * Event handler for button click (Clear)
+   * resets all of the input values
+   * to the total number of questions per category
    */
   handleClearButton() {
     var maxQuestionsObj = this.getMaxCountObj();
@@ -122,7 +97,7 @@ class RandomQuestions extends Component {
       randomIdxList = getRandomIndexList(questionSet.id, this.state[questionSet.id]);
       var randomQuestions = this.renderQuestions(idx, randomIdxList);
       return (
-        <div>
+        <div key={uuid.v1()}>
           <h4>{questionSet.category}</h4>
           <ul>
             {randomQuestions}
@@ -142,7 +117,6 @@ class RandomQuestions extends Component {
    */
   renderQuestions(idxCategory, idxList) {
     var list;
-    //console.log('idxList: ' + idxList);
     if (idxList) {
       list = idxList.map((idx) => {
         return (

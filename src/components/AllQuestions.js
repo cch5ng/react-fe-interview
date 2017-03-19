@@ -23,6 +23,12 @@ class AllQuestions extends Component {
     // this.state = maxQuestionsObj;
   }
 
+  componentDidMount() {
+    if (!window.indexedDB) {
+      window.alert("Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.");
+    }
+  }
+
   render() {
     var questionsList = h5bp_interview.questions.map(function(questionSet, idx) {
       return (

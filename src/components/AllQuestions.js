@@ -22,6 +22,7 @@ class AllQuestions extends Component {
     //this.renderQuestions = this.renderQuestions.bind(this);
     //this.getMaxCountObj = this.getMaxCountObj.bind(this);
     this.concatCategory = this.concatCategory.bind(this);
+    this.removeArrayItem = this.removeArrayItem.bind(this);
 
     // var maxQuestionsObj = this.getMaxCountObj();
     // maxQuestionsObj.display = 'all';
@@ -83,11 +84,12 @@ class AllQuestions extends Component {
     const question = label.innerText;
     let questionsAr = [];
     let questionsObj = {};
+    let questionIdx;
 
     console.log('shortCategory: ' + shortCategory);
     console.log('question: ' + question);
 
-    if (e.target.value === 'on') {
+    if (e.target.checked) {
       //add question to array
       console.log('this.state[shortCategory]: ' + this.state[shortCategory]);
       console.log('type this.state[shortCategory]: ' + typeof this.state[shortCategory]);
@@ -97,6 +99,12 @@ class AllQuestions extends Component {
       this.setState(questionsObj);
     } else {
       //remove question from array
+      questionsAr = this.state[shortCategory] ? this.state[shortCategory].slice(0) : [];
+      if (questionsAr.indexOf(question) > -1) {
+        questionsAr = this.removeArrayItem(questionsAr, questionsAr.indexOf(question));
+      }
+      questionsObj[shortCategory] = questionsAr;
+      this.setState(questionsObj);
 
     }
 
@@ -210,6 +218,29 @@ class AllQuestions extends Component {
     resultStr = categAr[0] + categAr[1];
 
     return resultStr;
+  }
+
+  /*
+   * @param {array}
+   * @param {int}
+   * @return {array}
+   * Removes item at given index
+   */
+  removeArrayItem(ar, idx) {
+    let resultAr = ar.slice(0);
+
+    if (ar.length === 1 && idx === 0) {
+      return [];
+    }
+    if (idx === ar.length - 1) {
+      resultAr.pop();
+      return resultAr;
+    }
+    if (ar.length > 1) {
+      resultAr.splice(idx, 1);
+    }
+
+    return resultAr;
   }
 }
 

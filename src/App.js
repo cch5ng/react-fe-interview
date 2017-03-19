@@ -13,6 +13,9 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    this.db = this.props.db;
+    console.log('this.props.db: ' + this.props.db);
+
     this.handleChange = this.handleChange.bind(this);
     this.handleRandomButton = this.handleRandomButton.bind(this);
     this.handleAllButton = this.handleAllButton.bind(this);
@@ -76,7 +79,7 @@ class App extends Component {
 */
 
     return (
-      <Router>
+      <Router db={this.props.db} >
         <div>
           <Navbar className="App-header" collapseOnSelect>
             <Navbar.Header>
@@ -94,7 +97,7 @@ class App extends Component {
           </Navbar>
           <main className="container-fluid">
             <Route exact path="/" component={RandomQuestions}/>
-            <Route path="/all" component={AllQuestions}/>
+            <Route path="/all" db={this.props.db} component={AllQuestions}/>
           </main>
         </div>
       </Router>

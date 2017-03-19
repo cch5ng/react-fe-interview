@@ -5,11 +5,14 @@ import uuid from 'node-uuid';
 //import {  } from 'react-bootstrap';
 import '../App.css';
 import h5bp_interview from '../utilities/h5bp_interview.json';
-//import { getRandomIndexList } from '../utilities';
+import { CATEGORIES } from '../utilities/constants';
 
 class AllQuestions extends Component {
   constructor(props) {
     super(props);
+
+    //this.db = this.props.db;
+    //console.log('this.db: ' + this.db)
 
     this.state = {
       GeneralQuestions: []
@@ -28,6 +31,9 @@ class AllQuestions extends Component {
     // maxQuestionsObj.display = 'all';
     // this.state = maxQuestionsObj;
   }
+
+//  componentDidMount() {
+//  }
 
 //
   render() {
@@ -56,7 +62,7 @@ class AllQuestions extends Component {
       <div>
         <h3>All Questions</h3>
         <form>
-          <FormGroup controlId="formControlsText">
+          <FormGroup controlId="list-name-inp">
             <ControlLabel>List Name</ControlLabel>
             <FormControl type="text" size="75" />
           </FormGroup>
@@ -86,13 +92,11 @@ class AllQuestions extends Component {
     let questionsObj = {};
     let questionIdx;
 
-    console.log('shortCategory: ' + shortCategory);
-    console.log('question: ' + question);
+    //console.log('shortCategory: ' + shortCategory);
+    //console.log('question: ' + question);
 
     if (e.target.checked) {
       //add question to array
-      console.log('this.state[shortCategory]: ' + this.state[shortCategory]);
-      console.log('type this.state[shortCategory]: ' + typeof this.state[shortCategory]);
       questionsAr = this.state[shortCategory] ? this.state[shortCategory].slice(0) : [];
       questionsAr.push(question);
       questionsObj[shortCategory] = questionsAr;
@@ -108,7 +112,7 @@ class AllQuestions extends Component {
 
     }
 
-    console.log('this.state[shortCategory]: ' + this.state[shortCategory]);
+    //console.log('this.state[shortCategory]: ' + this.state[shortCategory]);
 
     //var inputState = {};
     //inputState[e.target.id] = e.target.value;
@@ -122,6 +126,53 @@ class AllQuestions extends Component {
    */
   handleSaveButton(e) {
     console.log('clicked Save');
+    const listNameInput = document.getElementById('list-name-inp');
+    var listObj = {};
+    let questionsAr = [];
+    let db;
+
+    console.log('listNameInput.value: ' + listNameInput.value)
+
+    //create indexedDB
+    var request = window.indexedDB.open("FavoriteQuestions", 2);
+    console.log('request: ' + request);
+
+    //err handle
+    request.onerror = function(ev) {
+
+    }
+
+    request.onupgradeneeded = function(event) {
+      console.log('gets to line 145')
+
+      db = event.target.result;
+      var transaction = db.transaction(["lists"], "readwrite");
+
+      transaction.oncomplete = function(e) {
+        console.log('db updated');
+      }
+
+      transaction.onerror = function(e) {
+        console.log('db error: ' + e);
+      }
+
+      var objectStore = transaction.objectStore("lists");
+      listObj.name = listNameInput.value;
+
+      CATEGORIES.forEach((category) => {
+        questionsAr.push({category: this.state[category]});
+      })
+      console.log('questionsAr.length: ' + questionsAr.length);
+      listObj.questions = questionsAr;
+      var request = objectStore.add(listObj);
+      request.onsuccess = function(e) {
+        console.log('db record added');
+      }
+    };
+
+
+
+
     // this.setState({
     //   display: 'random'
     // });

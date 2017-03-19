@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, FormGroup, Checkbox, ControlLabel, FormControl } from 'react-bootstrap';
 import uuid from 'node-uuid';
 //import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-//import { Navbar, Nav, NavItem } from 'react-bootstrap';
+//import {  } from 'react-bootstrap';
 import '../App.css';
 import h5bp_interview from '../utilities/h5bp_interview.json';
 //import { getRandomIndexList } from '../utilities';
@@ -12,7 +12,7 @@ class AllQuestions extends Component {
     super(props);
 
     //this.handleChange = this.handleChange.bind(this);
-    //this.handleRandomButton = this.handleRandomButton.bind(this);
+    this.handleSaveButton = this.handleSaveButton.bind(this);
     //this.handleAllButton = this.handleAllButton.bind(this);
     //this.renderRandomQuestions = this.renderRandomQuestions.bind(this);
     //this.renderQuestions = this.renderQuestions.bind(this);
@@ -23,24 +23,41 @@ class AllQuestions extends Component {
     // this.state = maxQuestionsObj;
   }
 
+  componentDidMount() {
+    if (!window.indexedDB) {
+      window.alert("Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.");
+    }
+  }
+
   render() {
-    var questionsList = h5bp_interview.questions.map(function(questionSet) {
+    var questionsList = h5bp_interview.questions.map(function(questionSet, idx) {
       return (
-        <div key={uuid.v1()} className="p-left">
+        <div key={questionSet.category} className="p-left">
           <h4>{questionSet.category}</h4>
-          <ul>
-            {questionSet.question_list.map(function(question) {
-              return <li key={uuid.v1()}>{question}</li>
+          <FormGroup>
+            {questionSet.question_list.map(function(question, idx2) {
+              return <Checkbox key={questionSet.category+idx2}>{question}</Checkbox>
             })}
-          </ul>
-          </div>
+          </FormGroup>
+        </div>
         ) 
     });
 
     return (
       <div>
         <h3>All Questions</h3>
-        {questionsList}
+        <form>
+          <FormGroup controlId="formControlsText">
+            <ControlLabel>List Name</ControlLabel>
+            <FormControl type="text" size="75" />
+          </FormGroup>
+
+          <Button className="button" onClick={this.handleSaveButton}>Save</Button>
+
+          {questionsList}
+
+          <Button className="button" onClick={this.handleSaveButton}>Save</Button>
+        </form>
       </div>
     );
   }
@@ -62,11 +79,12 @@ class AllQuestions extends Component {
    * @return {}
    * Event handler for button click (Get Random Questions)
    */
-  // handleRandomButton() {
-  //   this.setState({
-  //     display: 'random'
-  //   });
-  // }
+  handleSaveButton(e) {
+    console.log('clicked Save');
+    // this.setState({
+    //   display: 'random'
+    // });
+  }
 
   /**
    * @param {}

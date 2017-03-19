@@ -11,34 +11,42 @@ class AllQuestions extends Component {
   constructor(props) {
     super(props);
 
-    //this.handleChange = this.handleChange.bind(this);
+    this.state = {
+      GeneralQuestions: []
+    }
+
+    this.handleChange = this.handleChange.bind(this);
     this.handleSaveButton = this.handleSaveButton.bind(this);
     //this.handleAllButton = this.handleAllButton.bind(this);
     //this.renderRandomQuestions = this.renderRandomQuestions.bind(this);
     //this.renderQuestions = this.renderQuestions.bind(this);
     //this.getMaxCountObj = this.getMaxCountObj.bind(this);
+    this.concatCategory = this.concatCategory.bind(this);
 
     // var maxQuestionsObj = this.getMaxCountObj();
     // maxQuestionsObj.display = 'all';
     // this.state = maxQuestionsObj;
   }
 
-  componentDidMount() {
-    if (!window.indexedDB) {
-      window.alert("Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.");
-    }
-  }
-
+//
   render() {
+    var that = this;
     var questionsList = h5bp_interview.questions.map(function(questionSet, idx) {
       return (
         <div key={questionSet.category} className="p-left">
           <h4>{questionSet.category}</h4>
-          <FormGroup>
+          <div className="form-group">
             {questionSet.question_list.map(function(question, idx2) {
-              return <Checkbox key={questionSet.category+idx2}>{question}</Checkbox>
+              return (
+                <div className="checkbox" key={questionSet.category+idx2}>
+                  <label id={questionSet.category+idx2}>
+                    <input type="checkbox" className={questionSet.category} value="on" onChange={that.handleChange} />
+                      {question}
+                  </label>
+                </div>
+              )
             })}
-          </FormGroup>
+          </div>
         </div>
         ) 
     });
@@ -67,12 +75,37 @@ class AllQuestions extends Component {
    * @param {event}
    * @return {}
    * Event handler for input field update (number change)
+   * update state which tracks all currently checked questions
    */
-  // handleChange(e) {
-  //   var inputState = {};
-  //   inputState[e.target.id] = e.target.value;
-  //   this.setState(inputState);
-  // }
+  handleChange(e) {
+    const shortCategory = this.concatCategory(e.target.classList);
+    const label = e.target.parentElement;
+    const question = label.innerText;
+    let questionsAr = [];
+    let questionsObj = {};
+
+    console.log('shortCategory: ' + shortCategory);
+    console.log('question: ' + question);
+
+    if (e.target.value === 'on') {
+      //add question to array
+      console.log('this.state[shortCategory]: ' + this.state[shortCategory]);
+      console.log('type this.state[shortCategory]: ' + typeof this.state[shortCategory]);
+      questionsAr = this.state[shortCategory] ? this.state[shortCategory].slice(0) : [];
+      questionsAr.push(question);
+      questionsObj[shortCategory] = questionsAr;
+      this.setState(questionsObj);
+    } else {
+      //remove question from array
+
+    }
+
+    console.log('this.state[shortCategory]: ' + this.state[shortCategory]);
+
+    //var inputState = {};
+    //inputState[e.target.id] = e.target.value;
+    //this.setState(inputState);
+  }
 
   /**
    * @param {}
@@ -161,6 +194,23 @@ class AllQuestions extends Component {
   //   });
   //   return maxQuestionsObj;
   // }
+
+  /*
+   * @param {string}
+   * @return {string}
+   * Removes space from questions category string
+   */
+  concatCategory(categAr) {
+    let resultStr;
+
+    // console.log('keys categStr: ' + Object.keys(categStr));
+    // console.log('categStr[0]: ' + categStr[0]);
+    // console.log('categStr[1]: ' + categStr[1]);
+    // console.log('type categStr: ' + typeof categStr);
+    resultStr = categAr[0] + categAr[1];
+
+    return resultStr;
+  }
 }
 
 export default AllQuestions;

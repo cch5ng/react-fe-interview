@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, FormGroup, Checkbox, ControlLabel, FormControl } from 'react-bootstrap';
 import uuid from 'node-uuid';
 //import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import { FormGroup, Checkbox } from 'react-bootstrap';
+//import {  } from 'react-bootstrap';
 import '../App.css';
 import h5bp_interview from '../utilities/h5bp_interview.json';
 //import { getRandomIndexList } from '../utilities';
@@ -41,6 +41,11 @@ class AllQuestions extends Component {
       <div>
         <h3>All Questions</h3>
         <form>
+          <FormGroup controlId="formControlsText">
+            <ControlLabel>List Name</ControlLabel>
+            <FormControl type="text" size="75" />
+          </FormGroup>
+
           <Button className="button" onClick={this.handleSaveButton}>Save</Button>
 
           {questionsList}

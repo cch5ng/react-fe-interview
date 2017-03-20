@@ -134,7 +134,7 @@ class AllQuestions extends Component {
     console.log('listNameInput.value: ' + listNameInput.value)
 
     //create indexedDB
-    var request = window.indexedDB.open("FavoriteQuestions", 2);
+    var request = window.indexedDB.open("FavoriteQuestions", 4);
     console.log('request: ' + request);
 
     //err handle
@@ -146,27 +146,32 @@ class AllQuestions extends Component {
       console.log('gets to line 145')
 
       db = event.target.result;
-      var transaction = db.transaction(["lists"], "readwrite");
+      var transaction = event.target.transaction;
 
-      transaction.oncomplete = function(e) {
-        console.log('db updated');
-      }
+      transaction.onsuccess = function(e) {
+        console.log('gets to line 152')
 
-      transaction.onerror = function(e) {
-        console.log('db error: ' + e);
-      }
+        var requestLists = db.transaction(["lists"], "readwrite");
 
-      var objectStore = transaction.objectStore("lists");
-      listObj.name = listNameInput.value;
+        requestLists.oncomplete = function(e) {
 
-      CATEGORIES.forEach((category) => {
-        questionsAr.push({category: this.state[category]});
-      })
-      console.log('questionsAr.length: ' + questionsAr.length);
-      listObj.questions = questionsAr;
-      var request = objectStore.add(listObj);
-      request.onsuccess = function(e) {
-        console.log('db record added');
+          var objectStore = transaction.objectStore("lists");
+          listObj.name = listNameInput.value;
+
+          CATEGORIES.forEach((category) => {
+            questionsAr.push({category: this.state[category]});
+          })
+          console.log('questionsAr.length: ' + questionsAr.length);
+          listObj.questions = questionsAr;
+          var request = objectStore.add(listObj);
+          request.onsuccess = function(e) {
+            console.log('db record added');
+          }
+        }
+
+        requestLists.onerror = function(e) {
+          console.log('db error: ' + e);
+        }
       }
     };
 

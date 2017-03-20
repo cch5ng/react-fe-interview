@@ -28,7 +28,7 @@ if (!window.indexedDB) {
     ];
 
     //create indexedDB
-    var request = window.indexedDB.open("FavoriteQuestions", 2);
+    var request = window.indexedDB.open("FavoriteQuestions", 1);
 
     //err handle
     request.onerror = function(ev) {

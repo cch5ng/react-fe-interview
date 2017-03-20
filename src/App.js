@@ -59,20 +59,6 @@ class App extends Component {
         ) 
     });
 
-/*
-            <div>
-              <h3>Random Interview Questions</h3>
-              <form className="p-left">
-                {questionsInputList}
-              </form>
-            </div>
-            <p className="center">
-              <Button className="button" onClick={this.handleRandomButton}>Get Random Questions</Button>
-              <Button className="button" onClick={this.handleAllButton}>All Questions</Button>
-            </p>
-            {this.state.display === 'all' ? questionsList : this.renderRandomQuestions()} 
-*/
-
     return (
       <Router db={this.props.db} >
         <div>

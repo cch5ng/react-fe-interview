@@ -125,14 +125,11 @@ class AllQuestions extends Component {
    * Event handler for button click (Get Random Questions)
    */
   handleSaveButton(e) {
-    console.log('clicked Save');
     const listNameInput = document.getElementById('list-name-inp');
     var listObj = {};
     let questionsAr = [];
     let db;
     const key = uuid.v1();
-
-    console.log('listNameInput.value: ' + listNameInput.value)
 
     CATEGORIES.forEach((categ) => {
       let categObj = {};
@@ -149,11 +146,6 @@ class AllQuestions extends Component {
       // This code runs if there were any errors
       console.log(err);
     });
-
-
-    // this.setState({
-    //   display: 'random'
-    // });
   }
 
   /**

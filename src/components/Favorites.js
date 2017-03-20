@@ -23,19 +23,15 @@ class Favorites extends Component {
       NetworkQuestions: [],
     }
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSaveButton = this.handleSaveButton.bind(this);
+    // this.handleChange = this.handleChange.bind(this);
+    // this.handleSaveButton = this.handleSaveButton.bind(this);
     //this.handleAllButton = this.handleAllButton.bind(this);
     //this.renderRandomQuestions = this.renderRandomQuestions.bind(this);
     //this.renderQuestions = this.renderQuestions.bind(this);
     //this.getMaxCountObj = this.getMaxCountObj.bind(this);
-    this.concatCategory = this.concatCategory.bind(this);
-    this.removeArrayItem = this.removeArrayItem.bind(this);
-    this.renderSavedLists = this.renderSavedLists.bind(this);
-
-    // var maxQuestionsObj = this.getMaxCountObj();
-    // maxQuestionsObj.display = 'all';
-    // this.state = maxQuestionsObj;
+    // this.concatCategory = this.concatCategory.bind(this);
+    // this.removeArrayItem = this.removeArrayItem.bind(this);
+    // this.renderSavedLists = this.renderSavedLists.bind(this);
   }
 
   componentWillMount() {
@@ -47,7 +43,6 @@ class Favorites extends Component {
     localforage.iterate(function(value, key, iterationNumber) {
 
         savedLists.push([key, value]);
-        console.log([key, value]);
     }).then(function() {
         renderSavedLists = savedLists.map((list) => {
           let link = "/saved/" + list[0];
@@ -56,10 +51,6 @@ class Favorites extends Component {
             <li><Link to={link}>{name}</Link></li>
           )
         })
-        // console.log('Iteration has completed');
-        // console.log('renderSavedLists: ' + renderSavedLists);
-        // console.log('renderSavedLists[0]: ' + renderSavedLists[0]);
-        // console.log('key renderSavedLists[0]: ' + Object.keys(renderSavedLists[0]));
 
         that.setState({
           renderSavedLists: renderSavedLists
@@ -72,10 +63,7 @@ class Favorites extends Component {
 
   }
 
-//          {this.renderSavedLists()}
-
   render() {
-
     return (
       <div>
         <h3>Favorites</h3>
@@ -93,77 +81,77 @@ class Favorites extends Component {
    * Event handler for input field update (number change)
    * update state which tracks all currently checked questions
    */
-  handleChange(e) {
-    const shortCategory = this.concatCategory(e.target.classList);
-    const label = e.target.parentElement;
-    const question = label.innerText;
-    let questionsAr = [];
-    let questionsObj = {};
-    let questionIdx;
+  // handleChange(e) {
+  //   const shortCategory = this.concatCategory(e.target.classList);
+  //   const label = e.target.parentElement;
+  //   const question = label.innerText;
+  //   let questionsAr = [];
+  //   let questionsObj = {};
+  //   let questionIdx;
 
-    //console.log('shortCategory: ' + shortCategory);
-    //console.log('question: ' + question);
+  //   //console.log('shortCategory: ' + shortCategory);
+  //   //console.log('question: ' + question);
 
-    if (e.target.checked) {
-      //add question to array
-      questionsAr = this.state[shortCategory] ? this.state[shortCategory].slice(0) : [];
-      questionsAr.push(question);
-      questionsObj[shortCategory] = questionsAr;
-      this.setState(questionsObj);
-    } else {
-      //remove question from array
-      questionsAr = this.state[shortCategory] ? this.state[shortCategory].slice(0) : [];
-      if (questionsAr.indexOf(question) > -1) {
-        questionsAr = this.removeArrayItem(questionsAr, questionsAr.indexOf(question));
-      }
-      questionsObj[shortCategory] = questionsAr;
-      this.setState(questionsObj);
+  //   if (e.target.checked) {
+  //     //add question to array
+  //     questionsAr = this.state[shortCategory] ? this.state[shortCategory].slice(0) : [];
+  //     questionsAr.push(question);
+  //     questionsObj[shortCategory] = questionsAr;
+  //     this.setState(questionsObj);
+  //   } else {
+  //     //remove question from array
+  //     questionsAr = this.state[shortCategory] ? this.state[shortCategory].slice(0) : [];
+  //     if (questionsAr.indexOf(question) > -1) {
+  //       questionsAr = this.removeArrayItem(questionsAr, questionsAr.indexOf(question));
+  //     }
+  //     questionsObj[shortCategory] = questionsAr;
+  //     this.setState(questionsObj);
 
-    }
+  //   }
 
-    //console.log('this.state[shortCategory]: ' + this.state[shortCategory]);
+  //   //console.log('this.state[shortCategory]: ' + this.state[shortCategory]);
 
-    //var inputState = {};
-    //inputState[e.target.id] = e.target.value;
-    //this.setState(inputState);
-  }
+  //   //var inputState = {};
+  //   //inputState[e.target.id] = e.target.value;
+  //   //this.setState(inputState);
+  // }
 
   /**
    * @param {}
    * @return {}
    * Event handler for button click (Get Random Questions)
    */
-  handleSaveButton(e) {
-    console.log('clicked Save');
-    const listNameInput = document.getElementById('list-name-inp');
-    var listObj = {};
-    let questionsAr = [];
-    let db;
-    const key = uuid.v1();
+  // handleSaveButton(e) {
+  //   console.log('clicked Save');
+  //   const listNameInput = document.getElementById('list-name-inp');
+  //   var listObj = {};
+  //   let questionsAr = [];
+  //   let db;
+  //   const key = uuid.v1();
 
-    console.log('listNameInput.value: ' + listNameInput.value)
+  //   console.log('listNameInput.value: ' + listNameInput.value)
 
-    CATEGORIES.forEach((categ) => {
-      let categObj = {};
-      categObj[categ] = this.state[categ];
-      questionsAr.push(categObj);
-    })
+  //   CATEGORIES.forEach((categ) => {
+  //     let categObj = {};
+  //     categObj[categ] = this.state[categ];
+  //     questionsAr.push(categObj);
+  //   })
 
-    listObj.name = listNameInput.value;
-    listObj.questions = questionsAr;
+  //   listObj.name = listNameInput.value;
+  //   listObj.questions = questionsAr;
 
-    localforage.setItem(key, listObj).then(function(value) {
-      console.log('set new list');
-    }).catch(function(err) {
-      // This code runs if there were any errors
-      console.log(err);
-    });
+  //   localforage.setItem(key, listObj).then(function(value) {
+  //     console.log('set new list');
+  //   }).catch(function(err) {
+  //     // This code runs if there were any errors
+  //     console.log(err);
+  //   });
 
 
-    // this.setState({
-    //   display: 'random'
-    // });
-  }
+  //   // this.setState({
+  //   //   display: 'random'
+  //   // });
+  // }
 
   /**
    * @param {}
@@ -181,7 +169,6 @@ class Favorites extends Component {
 
   // RENDER
   renderSavedLists() {
-    console.log('gets to renderSavedLists');
     var savedLists = [];
     var renderSavedLists = [];
 
@@ -192,22 +179,15 @@ class Favorites extends Component {
         // database.
 
         savedLists.push([key, value]);
-        console.log([key, value]);
     }).then(function() {
-        //savedLists.forEach((list) => {
         renderSavedLists = savedLists.map((list) => {
           let link = "/" + list[0];
-          console.log('link: ' + link);
           let name = list[1].name;
-          console.log('name: ' + name);
           return (
             <li><Link to={link}>{name}</Link></li>
           )
         })
         console.log('Iteration has completed');
-        console.log('renderSavedLists: ' + renderSavedLists);
-        console.log('renderSavedLists[0]: ' + renderSavedLists[0]);
-        console.log('key renderSavedLists[0]: ' + Object.keys(renderSavedLists[0]));
       return renderSavedLists;
     }).catch(function(err) {
         // This code runs if there were any errors

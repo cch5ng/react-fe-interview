@@ -11,9 +11,6 @@ class AllQuestions extends Component {
   constructor(props) {
     super(props);
 
-    //this.db = this.props.db;
-    //console.log('this.db: ' + this.db)
-
     this.state = {
       GeneralQuestions: []
     }
@@ -32,10 +29,6 @@ class AllQuestions extends Component {
     // this.state = maxQuestionsObj;
   }
 
-//  componentDidMount() {
-//  }
-
-//
   render() {
     var that = this;
     var questionsList = h5bp_interview.questions.map(function(questionSet, idx) {
@@ -132,51 +125,6 @@ class AllQuestions extends Component {
     let db;
 
     console.log('listNameInput.value: ' + listNameInput.value)
-
-    //create indexedDB
-    var request = window.indexedDB.open("FavoriteQuestions", 4);
-    console.log('request: ' + request);
-
-    //err handle
-    request.onerror = function(ev) {
-
-    }
-
-    request.onupgradeneeded = function(event) {
-      console.log('gets to line 145')
-
-      db = event.target.result;
-      var transaction = event.target.transaction;
-
-      transaction.onsuccess = function(e) {
-        console.log('gets to line 152')
-
-        var requestLists = db.transaction(["lists"], "readwrite");
-
-        requestLists.oncomplete = function(e) {
-
-          var objectStore = transaction.objectStore("lists");
-          listObj.name = listNameInput.value;
-
-          CATEGORIES.forEach((category) => {
-            questionsAr.push({category: this.state[category]});
-          })
-          console.log('questionsAr.length: ' + questionsAr.length);
-          listObj.questions = questionsAr;
-          var request = objectStore.add(listObj);
-          request.onsuccess = function(e) {
-            console.log('db record added');
-          }
-        }
-
-        requestLists.onerror = function(e) {
-          console.log('db error: ' + e);
-        }
-      }
-    };
-
-
-
 
     // this.setState({
     //   display: 'random'

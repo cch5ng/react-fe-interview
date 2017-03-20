@@ -65,7 +65,7 @@ class App extends Component {
           <Navbar className="App-header" collapseOnSelect>
             <Navbar.Header>
               <Navbar.Brand>
-                <a href="#">Front End Interview Questions</a>
+                <Link to="/">Front End Interview Questions</Link>
               </Navbar.Brand>
               <Navbar.Toggle />
             </Navbar.Header>

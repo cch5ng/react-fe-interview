@@ -8,13 +8,11 @@ import h5bp_interview from './utilities/h5bp_interview.json';
 import { getRandomIndexList } from './utilities';
 import RandomQuestions from './components/RandomQuestions';
 import AllQuestions from './components/AllQuestions';
+import Favorites from './components/Favorites';
 
 class App extends Component {
   constructor(props) {
     super(props);
-
-    this.db = this.props.db;
-    console.log('this.props.db: ' + this.props.db);
 
     this.handleChange = this.handleChange.bind(this);
     this.handleRandomButton = this.handleRandomButton.bind(this);
@@ -60,10 +58,6 @@ class App extends Component {
         ) 
     });
 
-//            
-
-//                <NavItem><Link to="/save">Save List</Link></NavItem>
-//                <NavItem><Link to="/favorites">Favorites</Link></NavItem>
 /*
             <div>
               <h3>Random Interview Questions</h3>
@@ -92,12 +86,14 @@ class App extends Component {
               <Nav pullRight>
                 <NavItem><Link to="/">Random</Link></NavItem>
                 <NavItem><Link to="/all">All Questions</Link></NavItem>
+                <NavItem><Link to="/favorites">Favorites</Link></NavItem>
               </Nav>
             </Navbar.Collapse>
           </Navbar>
           <main className="container-fluid">
             <Route exact path="/" component={RandomQuestions}/>
-            <Route path="/all" db={this.props.db} component={AllQuestions}/>
+            <Route path="/all" component={AllQuestions}/>
+            <Route path="/favorites" component={Favorites}/>
           </main>
         </div>
       </Router>

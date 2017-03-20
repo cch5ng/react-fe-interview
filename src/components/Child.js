@@ -12,6 +12,10 @@ class Child extends Component {
   constructor(props) {
     super(props);
 
+    //console.log('this.props.match.url: ' + this.props.match.url);
+    this.listId = this.props.match.url.split('/')[2];
+    //console.log('this.listId: ' + this.listId);
+
     this.state = {
       GeneralQuestions: [],
       HTMLQuestions: [],
@@ -36,43 +40,91 @@ class Child extends Component {
     // this.state = maxQuestionsObj;
   }
 
+  componentWillMount() {
+    let that = this;
+    var savedLists = [];
+    var renderSavedLists = [];
+
+    console.log('this.listId: ' + this.listId);
+    localforage.getItem(this.listId).then(function(value) {
+        // This code runs once the value has been loaded
+        // from the offline store.
+        console.log(value);
+        that.setState({
+          name: value.name,
+          questions: value.questions
+        })
+    }).catch(function(err) {
+        // This code runs if there were any errors
+        console.log(err);
+    });
+
+    // The same code, but using ES6 Promises.
+    // localforage.iterate(function(value, key, iterationNumber) {
+
+    //     savedLists.push([key, value]);
+    //     console.log([key, value]);
+    // }).then(function() {
+    //     renderSavedLists = savedLists.map((list) => {
+    //       let link = "/saved/" + list[0];
+    //       let name = list[1].name;
+    //       return (
+    //         <li><Link to={link}>{name}</Link></li>
+    //       )
+    //     })
+    //     // console.log('Iteration has completed');
+    //     // console.log('renderSavedLists: ' + renderSavedLists);
+    //     // console.log('renderSavedLists[0]: ' + renderSavedLists[0]);
+    //     // console.log('key renderSavedLists[0]: ' + Object.keys(renderSavedLists[0]));
+
+    //     that.setState({
+    //       renderSavedLists: renderSavedLists
+    //     })
+
+    // }).catch(function(err) {
+    //     // This code runs if there were any errors
+    //     console.log(err);
+    // });
+
+  }
+
   render() {
     var that = this;
-    var questionsList = h5bp_interview.questions.map(function(questionSet, idx) {
-      return (
-        <div key={questionSet.category} className="p-left">
-          <h4>{questionSet.category}</h4>
-          <div className="form-group">
-            {questionSet.question_list.map(function(question, idx2) {
-              return (
-                <div className="checkbox" key={questionSet.category+idx2}>
-                  <label id={questionSet.category+idx2}>
-                    <input type="checkbox" className={questionSet.category} value="on" onChange={that.handleChange} />
-                      {question}
-                  </label>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-        ) 
-    });
+    var category;
+    var questions = [];
+    if (this.state.questions) {
+      var questionsList = this.state.questions.map(function(questionObj, idx) {
+        for (let key in questionObj) {
+          category = key;
+          console.log('category: ' + category);
+          questions = questionObj[key];
+          console.log('questions.length: ' + questions.length);
+        }
+
+        if (questions.length) {
+          return (
+            <div key={category} className="p-left">
+              <h4>{category}</h4>
+                <ul>
+                {questions.map(function(question, idx2) {
+                  return (
+                    <li>{question}</li>
+                  )
+                })}
+                </ul>
+            </div>
+          )
+        } else {
+          return null
+        }
+      });
+    }
 
     return (
       <div>
-        <h3>All Questions</h3>
-        <form>
-          <FormGroup controlId="list-name-inp">
-            <ControlLabel>List Name</ControlLabel>
-            <FormControl type="text" size="75" />
-          </FormGroup>
+        <h3>List: {this.state.name}</h3>
+          {this.state.questions ? questionsList : null}
 
-          <Button className="button" onClick={this.handleSaveButton}>Save</Button>
-
-          {questionsList}
-
-          <Button className="button" onClick={this.handleSaveButton}>Save</Button>
-        </form>
       </div>
     );
   }

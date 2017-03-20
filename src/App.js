@@ -9,6 +9,7 @@ import { getRandomIndexList } from './utilities';
 import RandomQuestions from './components/RandomQuestions';
 import AllQuestions from './components/AllQuestions';
 import Favorites from './components/Favorites';
+import Child from './components/Child';
 
 class App extends Component {
   constructor(props) {
@@ -94,6 +95,7 @@ class App extends Component {
             <Route exact path="/" component={RandomQuestions}/>
             <Route path="/all" component={AllQuestions}/>
             <Route path="/favorites" component={Favorites}/>
+            <Route path="/saved/:id" component={Child}/>
           </main>
         </div>
       </Router>

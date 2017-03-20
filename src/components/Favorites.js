@@ -5,7 +5,6 @@ import localforage from 'localforage';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 //import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 //import {  } from 'react-bootstrap';
-import Child from '../components/Child';
 import '../App.css';
 import h5bp_interview from '../utilities/h5bp_interview.json';
 import { CATEGORIES } from '../utilities/constants';
@@ -51,7 +50,7 @@ class Favorites extends Component {
         console.log([key, value]);
     }).then(function() {
         renderSavedLists = savedLists.map((list) => {
-          let link = "/" + list[0];
+          let link = "/saved/" + list[0];
           let name = list[1].name;
           return (
             <li><Link to={link}>{name}</Link></li>
@@ -83,8 +82,6 @@ class Favorites extends Component {
         <ul>
           {this.state.renderSavedLists}
         </ul>
-
-        <Route path="/:id" component={Child}/>
       </div>
     );
   }

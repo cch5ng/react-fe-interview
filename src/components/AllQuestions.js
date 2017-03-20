@@ -1,44 +1,59 @@
 import React, { Component } from 'react';
 import { Button, FormGroup, Checkbox, ControlLabel, FormControl } from 'react-bootstrap';
 import uuid from 'node-uuid';
+import localforage from 'localforage';
 //import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 //import {  } from 'react-bootstrap';
 import '../App.css';
 import h5bp_interview from '../utilities/h5bp_interview.json';
-//import { getRandomIndexList } from '../utilities';
+import { CATEGORIES } from '../utilities/constants';
 
 class AllQuestions extends Component {
   constructor(props) {
     super(props);
 
-    //this.handleChange = this.handleChange.bind(this);
+    this.state = {
+      GeneralQuestions: [],
+      HTMLQuestions: [],
+      CSSQuestions: [],
+      JSQuestions: [],
+      TestingQuestions: [],
+      PerformanceQuestions: [],
+      NetworkQuestions: []
+    }
+
+    this.handleChange = this.handleChange.bind(this);
     this.handleSaveButton = this.handleSaveButton.bind(this);
     //this.handleAllButton = this.handleAllButton.bind(this);
     //this.renderRandomQuestions = this.renderRandomQuestions.bind(this);
     //this.renderQuestions = this.renderQuestions.bind(this);
     //this.getMaxCountObj = this.getMaxCountObj.bind(this);
+    this.concatCategory = this.concatCategory.bind(this);
+    this.removeArrayItem = this.removeArrayItem.bind(this);
 
     // var maxQuestionsObj = this.getMaxCountObj();
     // maxQuestionsObj.display = 'all';
     // this.state = maxQuestionsObj;
   }
 
-  componentDidMount() {
-    if (!window.indexedDB) {
-      window.alert("Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.");
-    }
-  }
-
   render() {
+    var that = this;
     var questionsList = h5bp_interview.questions.map(function(questionSet, idx) {
       return (
         <div key={questionSet.category} className="p-left">
           <h4>{questionSet.category}</h4>
-          <FormGroup>
+          <div className="form-group">
             {questionSet.question_list.map(function(question, idx2) {
-              return <Checkbox key={questionSet.category+idx2}>{question}</Checkbox>
+              return (
+                <div className="checkbox" key={questionSet.category+idx2}>
+                  <label id={questionSet.category+idx2}>
+                    <input type="checkbox" className={questionSet.category} value="on" onChange={that.handleChange} />
+                      {question}
+                  </label>
+                </div>
+              )
             })}
-          </FormGroup>
+          </div>
         </div>
         ) 
     });
@@ -47,12 +62,11 @@ class AllQuestions extends Component {
       <div>
         <h3>All Questions</h3>
         <form>
-          <FormGroup controlId="formControlsText">
+          <Button className="button" onClick={this.handleSaveButton}>Save</Button>
+          <FormGroup controlId="list-name-inp">
             <ControlLabel>List Name</ControlLabel>
             <FormControl type="text" size="75" />
           </FormGroup>
-
-          <Button className="button" onClick={this.handleSaveButton}>Save</Button>
 
           {questionsList}
 
@@ -67,12 +81,42 @@ class AllQuestions extends Component {
    * @param {event}
    * @return {}
    * Event handler for input field update (number change)
+   * update state which tracks all currently checked questions
    */
-  // handleChange(e) {
-  //   var inputState = {};
-  //   inputState[e.target.id] = e.target.value;
-  //   this.setState(inputState);
-  // }
+  handleChange(e) {
+    const shortCategory = this.concatCategory(e.target.classList);
+    const label = e.target.parentElement;
+    const question = label.innerText;
+    let questionsAr = [];
+    let questionsObj = {};
+    let questionIdx;
+
+    //console.log('shortCategory: ' + shortCategory);
+    //console.log('question: ' + question);
+
+    if (e.target.checked) {
+      //add question to array
+      questionsAr = this.state[shortCategory] ? this.state[shortCategory].slice(0) : [];
+      questionsAr.push(question);
+      questionsObj[shortCategory] = questionsAr;
+      this.setState(questionsObj);
+    } else {
+      //remove question from array
+      questionsAr = this.state[shortCategory] ? this.state[shortCategory].slice(0) : [];
+      if (questionsAr.indexOf(question) > -1) {
+        questionsAr = this.removeArrayItem(questionsAr, questionsAr.indexOf(question));
+      }
+      questionsObj[shortCategory] = questionsAr;
+      this.setState(questionsObj);
+
+    }
+
+    //console.log('this.state[shortCategory]: ' + this.state[shortCategory]);
+
+    //var inputState = {};
+    //inputState[e.target.id] = e.target.value;
+    //this.setState(inputState);
+  }
 
   /**
    * @param {}
@@ -80,10 +124,27 @@ class AllQuestions extends Component {
    * Event handler for button click (Get Random Questions)
    */
   handleSaveButton(e) {
-    console.log('clicked Save');
-    // this.setState({
-    //   display: 'random'
-    // });
+    const listNameInput = document.getElementById('list-name-inp');
+    var listObj = {};
+    let questionsAr = [];
+    let db;
+    const key = uuid.v1();
+
+    CATEGORIES.forEach((categ) => {
+      let categObj = {};
+      categObj[categ] = this.state[categ];
+      questionsAr.push(categObj);
+    })
+
+    listObj.name = listNameInput.value;
+    listObj.questions = questionsAr;
+
+    localforage.setItem(key, listObj).then(function(value) {
+      console.log('set new list');
+    }).catch(function(err) {
+      // This code runs if there were any errors
+      console.log(err);
+    });
   }
 
   /**
@@ -161,6 +222,46 @@ class AllQuestions extends Component {
   //   });
   //   return maxQuestionsObj;
   // }
+
+  /*
+   * @param {string}
+   * @return {string}
+   * Removes space from questions category string
+   */
+  concatCategory(categAr) {
+    let resultStr;
+
+    // console.log('keys categStr: ' + Object.keys(categStr));
+    // console.log('categStr[0]: ' + categStr[0]);
+    // console.log('categStr[1]: ' + categStr[1]);
+    // console.log('type categStr: ' + typeof categStr);
+    resultStr = categAr[0] + categAr[1];
+
+    return resultStr;
+  }
+
+  /*
+   * @param {array}
+   * @param {int}
+   * @return {array}
+   * Removes item at given index
+   */
+  removeArrayItem(ar, idx) {
+    let resultAr = ar.slice(0);
+
+    if (ar.length === 1 && idx === 0) {
+      return [];
+    }
+    if (idx === ar.length - 1) {
+      resultAr.pop();
+      return resultAr;
+    }
+    if (ar.length > 1) {
+      resultAr.splice(idx, 1);
+    }
+
+    return resultAr;
+  }
 }
 
 export default AllQuestions;

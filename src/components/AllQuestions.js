@@ -62,12 +62,11 @@ class AllQuestions extends Component {
       <div>
         <h3>All Questions</h3>
         <form>
+          <Button className="button" onClick={this.handleSaveButton}>Save</Button>
           <FormGroup controlId="list-name-inp">
             <ControlLabel>List Name</ControlLabel>
             <FormControl type="text" size="75" />
           </FormGroup>
-
-          <Button className="button" onClick={this.handleSaveButton}>Save</Button>
 
           {questionsList}
 

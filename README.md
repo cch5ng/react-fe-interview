@@ -1,8 +1,11 @@
-### react-fe-interview
+### react-frontend-interview2 (wip)
 
 * This is a version of a Front End Technical Interview app which generates random test questions (for interviewer or candidate preparing for interviews)
 
-* This version is using react and is a work-in-progress (WIP) but with eventual enhancements
+* This version is using 
+  * react and react-router4
+  * localforage for browser-based storage
+  * react-bootstrap
 
 * This project's text content was sourced from the [h5bp repo, Front-end Developer Interview Questions](https://github.com/h5bp/Front-end-Developer-Interview-Questions/blob/master/README.md) with [MIT license](https://github.com/h5bp/Front-end-Developer-Interview-Questions/blob/master/LICENSE.md)
 
@@ -10,9 +13,17 @@
 
 Using node v6.9.2 (via nvm)
 
+### Resources
+
+[localforage](https://github.com/localForage/localForage/blob/master/docs/api.md) - this is a really handy library with a much easier api to use than the original indexedDB api
+
+[gh pages module](https://medium.freecodecamp.com/surge-vs-github-pages-deploying-a-create-react-app-project-c0ecbf317089#.v5vwn6ddr) - I'm using an npm module that allows easier hosting of react applications on github pages
+
 ### Running the Application
 
-If you have python installed, from the terminal:
+* Known issue: while you can access the demo using the url, http://cch5ng.github.io/react-frontend-interview2 there is an issue where the first view doesn't render until you click the logo or another nav link. The reason is that I'm redirecting my github projects to my private domain but this conflicts with the routes set up for react-router. Sorry! I will look into a fix <3
+
+Otherwise, if you have python installed, from the terminal:
 
 * Navigate to the /build directory
 * Type `python SimpleHTTPServer`

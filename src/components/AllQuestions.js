@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, FormGroup, Checkbox, ControlLabel, FormControl } from 'react-bootstrap';
 import uuid from 'node-uuid';
+import localforage from 'localforage';
 //import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 //import {  } from 'react-bootstrap';
 import '../App.css';
@@ -12,7 +13,13 @@ class AllQuestions extends Component {
     super(props);
 
     this.state = {
-      GeneralQuestions: []
+      GeneralQuestions: [],
+      HTMLQuestions: [],
+      CSSQuestions: [],
+      JSQuestions: [],
+      TestingQuestions: [],
+      PerformanceQuestions: [],
+      NetworkQuestions: []
     }
 
     this.handleChange = this.handleChange.bind(this);
@@ -123,8 +130,26 @@ class AllQuestions extends Component {
     var listObj = {};
     let questionsAr = [];
     let db;
+    const key = uuid.v1();
 
     console.log('listNameInput.value: ' + listNameInput.value)
+
+    CATEGORIES.forEach((categ) => {
+      let categObj = {};
+      categObj[categ] = this.state[categ];
+      questionsAr.push(categObj);
+    })
+
+    listObj.name = listNameInput.value;
+    listObj.questions = questionsAr;
+
+    localforage.setItem(key, listObj).then(function(value) {
+      console.log('set new list');
+    }).catch(function(err) {
+      // This code runs if there were any errors
+      console.log(err);
+    });
+
 
     // this.setState({
     //   display: 'random'

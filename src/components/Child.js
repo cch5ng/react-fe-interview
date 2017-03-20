@@ -12,9 +12,7 @@ class Child extends Component {
   constructor(props) {
     super(props);
 
-    //console.log('this.props.match.url: ' + this.props.match.url);
     this.listId = this.props.match.url.split('/')[2];
-    //console.log('this.listId: ' + this.listId);
 
     this.state = {
       GeneralQuestions: [],
@@ -26,14 +24,14 @@ class Child extends Component {
       NetworkQuestions: []
     }
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSaveButton = this.handleSaveButton.bind(this);
+    // this.handleChange = this.handleChange.bind(this);
+    // this.handleSaveButton = this.handleSaveButton.bind(this);
     //this.handleAllButton = this.handleAllButton.bind(this);
     //this.renderRandomQuestions = this.renderRandomQuestions.bind(this);
     //this.renderQuestions = this.renderQuestions.bind(this);
     //this.getMaxCountObj = this.getMaxCountObj.bind(this);
-    this.concatCategory = this.concatCategory.bind(this);
-    this.removeArrayItem = this.removeArrayItem.bind(this);
+    // this.concatCategory = this.concatCategory.bind(this);
+    // this.removeArrayItem = this.removeArrayItem.bind(this);
 
     // var maxQuestionsObj = this.getMaxCountObj();
     // maxQuestionsObj.display = 'all';
@@ -42,10 +40,7 @@ class Child extends Component {
 
   componentWillMount() {
     let that = this;
-    var savedLists = [];
-    var renderSavedLists = [];
 
-    console.log('this.listId: ' + this.listId);
     localforage.getItem(this.listId).then(function(value) {
         // This code runs once the value has been loaded
         // from the offline store.
@@ -58,34 +53,6 @@ class Child extends Component {
         // This code runs if there were any errors
         console.log(err);
     });
-
-    // The same code, but using ES6 Promises.
-    // localforage.iterate(function(value, key, iterationNumber) {
-
-    //     savedLists.push([key, value]);
-    //     console.log([key, value]);
-    // }).then(function() {
-    //     renderSavedLists = savedLists.map((list) => {
-    //       let link = "/saved/" + list[0];
-    //       let name = list[1].name;
-    //       return (
-    //         <li><Link to={link}>{name}</Link></li>
-    //       )
-    //     })
-    //     // console.log('Iteration has completed');
-    //     // console.log('renderSavedLists: ' + renderSavedLists);
-    //     // console.log('renderSavedLists[0]: ' + renderSavedLists[0]);
-    //     // console.log('key renderSavedLists[0]: ' + Object.keys(renderSavedLists[0]));
-
-    //     that.setState({
-    //       renderSavedLists: renderSavedLists
-    //     })
-
-    // }).catch(function(err) {
-    //     // This code runs if there were any errors
-    //     console.log(err);
-    // });
-
   }
 
   render() {
@@ -96,9 +63,9 @@ class Child extends Component {
       var questionsList = this.state.questions.map(function(questionObj, idx) {
         for (let key in questionObj) {
           category = key;
-          console.log('category: ' + category);
+          //console.log('category: ' + category);
           questions = questionObj[key];
-          console.log('questions.length: ' + questions.length);
+          //console.log('questions.length: ' + questions.length);
         }
 
         if (questions.length) {
@@ -136,77 +103,77 @@ class Child extends Component {
    * Event handler for input field update (number change)
    * update state which tracks all currently checked questions
    */
-  handleChange(e) {
-    const shortCategory = this.concatCategory(e.target.classList);
-    const label = e.target.parentElement;
-    const question = label.innerText;
-    let questionsAr = [];
-    let questionsObj = {};
-    let questionIdx;
+  // handleChange(e) {
+  //   const shortCategory = this.concatCategory(e.target.classList);
+  //   const label = e.target.parentElement;
+  //   const question = label.innerText;
+  //   let questionsAr = [];
+  //   let questionsObj = {};
+  //   let questionIdx;
 
-    //console.log('shortCategory: ' + shortCategory);
-    //console.log('question: ' + question);
+  //   //console.log('shortCategory: ' + shortCategory);
+  //   //console.log('question: ' + question);
 
-    if (e.target.checked) {
-      //add question to array
-      questionsAr = this.state[shortCategory] ? this.state[shortCategory].slice(0) : [];
-      questionsAr.push(question);
-      questionsObj[shortCategory] = questionsAr;
-      this.setState(questionsObj);
-    } else {
-      //remove question from array
-      questionsAr = this.state[shortCategory] ? this.state[shortCategory].slice(0) : [];
-      if (questionsAr.indexOf(question) > -1) {
-        questionsAr = this.removeArrayItem(questionsAr, questionsAr.indexOf(question));
-      }
-      questionsObj[shortCategory] = questionsAr;
-      this.setState(questionsObj);
+  //   if (e.target.checked) {
+  //     //add question to array
+  //     questionsAr = this.state[shortCategory] ? this.state[shortCategory].slice(0) : [];
+  //     questionsAr.push(question);
+  //     questionsObj[shortCategory] = questionsAr;
+  //     this.setState(questionsObj);
+  //   } else {
+  //     //remove question from array
+  //     questionsAr = this.state[shortCategory] ? this.state[shortCategory].slice(0) : [];
+  //     if (questionsAr.indexOf(question) > -1) {
+  //       questionsAr = this.removeArrayItem(questionsAr, questionsAr.indexOf(question));
+  //     }
+  //     questionsObj[shortCategory] = questionsAr;
+  //     this.setState(questionsObj);
 
-    }
+  //   }
 
-    //console.log('this.state[shortCategory]: ' + this.state[shortCategory]);
+  //   //console.log('this.state[shortCategory]: ' + this.state[shortCategory]);
 
-    //var inputState = {};
-    //inputState[e.target.id] = e.target.value;
-    //this.setState(inputState);
-  }
+  //   //var inputState = {};
+  //   //inputState[e.target.id] = e.target.value;
+  //   //this.setState(inputState);
+  // }
 
   /**
    * @param {}
    * @return {}
    * Event handler for button click (Get Random Questions)
    */
-  handleSaveButton(e) {
-    console.log('clicked Save');
-    const listNameInput = document.getElementById('list-name-inp');
-    var listObj = {};
-    let questionsAr = [];
-    let db;
-    const key = uuid.v1();
+  // handleSaveButton(e) {
+  //   console.log('clicked Save');
+  //   const listNameInput = document.getElementById('list-name-inp');
+  //   var listObj = {};
+  //   let questionsAr = [];
+  //   let db;
+  //   const key = uuid.v1();
 
-    console.log('listNameInput.value: ' + listNameInput.value)
+  //   console.log('listNameInput.value: ' + listNameInput.value)
 
-    CATEGORIES.forEach((categ) => {
-      let categObj = {};
-      categObj[categ] = this.state[categ];
-      questionsAr.push(categObj);
-    })
+  //   CATEGORIES.forEach((categ) => {
+  //     let categObj = {};
+  //     categObj[categ] = this.state[categ];
+  //     questionsAr.push(categObj);
+  //   })
 
-    listObj.name = listNameInput.value;
-    listObj.questions = questionsAr;
+  //   listObj.name = listNameInput.value;
+  //   listObj.questions = questionsAr;
 
-    localforage.setItem(key, listObj).then(function(value) {
-      console.log('set new list');
-    }).catch(function(err) {
-      // This code runs if there were any errors
-      console.log(err);
-    });
+  //   localforage.setItem(key, listObj).then(function(value) {
+  //     console.log('set new list');
+  //   }).catch(function(err) {
+  //     // This code runs if there were any errors
+  //     console.log(err);
+  //   });
 
 
-    // this.setState({
-    //   display: 'random'
-    // });
-  }
+  //   // this.setState({
+  //   //   display: 'random'
+  //   // });
+  // }
 
   /**
    * @param {}

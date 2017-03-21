@@ -62,7 +62,7 @@ class AllQuestions extends Component {
       <div>
         <h3>All Questions</h3>
         <form>
-          <Button className="button" onClick={this.handleSaveButton}>Save</Button>
+          <Button className="button" onClick={this.handleSaveButton}>Save List</Button>
           <FormGroup controlId="list-name-inp">
             <ControlLabel>List Name</ControlLabel>
             <FormControl type="text" size="75" />
@@ -70,7 +70,7 @@ class AllQuestions extends Component {
 
           {questionsList}
 
-          <Button className="button" onClick={this.handleSaveButton}>Save</Button>
+          <Button className="button" onClick={this.handleSaveButton}>Save List</Button>
         </form>
       </div>
     );

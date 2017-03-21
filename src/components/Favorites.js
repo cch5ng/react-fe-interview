@@ -32,6 +32,7 @@ class Favorites extends Component {
     // this.concatCategory = this.concatCategory.bind(this);
     // this.removeArrayItem = this.removeArrayItem.bind(this);
     // this.renderSavedLists = this.renderSavedLists.bind(this);
+    this.handleRemoveList = this.handleRemoveList.bind(this);
   }
 
   componentWillMount() {
@@ -48,7 +49,7 @@ class Favorites extends Component {
           let link = "/saved/" + list[0];
           let name = list[1].name;
           return (
-            <li><Link to={link}>{name}</Link></li>
+            <li><Link to={link} className="a-fave">{name}</Link><i className="fa fa-minus-circle" id={list[0]} onClick={that.handleRemoveList} aria-hidden="true"></i></li>
           )
         })
 
@@ -75,6 +76,54 @@ class Favorites extends Component {
   }
 
   // EVENT HANDLERS
+  /**
+   * @param {}
+   * @return {}
+   *
+   *
+   */
+  handleRemoveList(e) {
+    console.log('clicked remove icon');
+    console.log('e.target.id: ' + e.target.id);
+    const keyRemove = e.target.id;
+    let that = this;
+
+    localforage.removeItem(keyRemove).then(function() {
+        // Run this code once the key has been removed.
+        console.log('Key is cleared!');
+
+        var savedLists = [];
+        var renderSavedLists = [];
+
+        // The same code, but using ES6 Promises.
+        localforage.iterate(function(value, key, iterationNumber) {
+
+            savedLists.push([key, value]);
+        }).then(function() {
+            renderSavedLists = savedLists.map((list) => {
+              let link = "/saved/" + list[0];
+              let name = list[1].name;
+              return (
+                <li><Link to={link} className="a-fave">{name}</Link><i className="fa fa-minus-circle" id={list[0]} onClick={that.handleRemoveList} aria-hidden="true"></i></li>
+              )
+            })
+
+            that.setState({
+              renderSavedLists: renderSavedLists
+            })
+
+        }).catch(function(err) {
+            // This code runs if there were any errors
+            console.log(err);
+        });
+
+    }).catch(function(err) {
+        // This code runs if there were any errors
+        console.log(err);
+    });
+
+  }
+
   /**
    * @param {event}
    * @return {}

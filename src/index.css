@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: 'Raleway', sans-serif;
 }
 
 .p-left {
@@ -16,6 +16,35 @@ body {
 h2 {
 	margin-top: 12px;
 	margin-bottom: 12px;
+}
+
+.navbar-brand {
+  font-family: 'Abril Fatface', sans-serif;
+  font-size: 2em;
+  padding-top: 10px;
+}
+
+.navbar-default .navbar-brand {
+  color: #fff;
+}
+
+div.navbar-collapse.collapse {
+  background-color: #fff;
+  text-align: center;
+}
+
+div.navbar-collapse.collapse.in {
+  margin-top: 3px;
+}
+
+a.nav-a:link,
+a.nav-a:active,
+a.nav-a:hover,
+a.nav-a:visited {
+	color: #1B1378;
+	text-decoration: none;
+	font-size: 1.25em;
+/*	color: #fff;*/
 }
 
 /* form */
@@ -35,7 +64,7 @@ input {
 }
 
 .button {
-	margin: 0 3px;
+	margin: 0 3px 12px 3px;
 }
 
 button.btn-default {
@@ -44,4 +73,19 @@ button.btn-default {
 
 .center {
 	text-align: center;
+}
+
+@media (min-width: 768px) {
+	div.navbar-collapse.collapse {
+	  text-align: left;
+		background-color: #1B1378;
+	}
+
+	a.nav-a:link,
+	a.nav-a:active,
+	a.nav-a:hover,
+	a.nav-a:visited {
+		color: #fff;
+	}
+
 }

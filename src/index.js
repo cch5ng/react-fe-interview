@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import localforage from 'localforage';
 import App from './App';
-import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import './index.css';
 
 const defaultList = {
 	name: 'default list',

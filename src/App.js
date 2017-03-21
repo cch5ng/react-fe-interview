@@ -71,9 +71,9 @@ class App extends Component {
             </Navbar.Header>
             <Navbar.Collapse>
               <Nav pullRight>
-                <NavItem><Link to="/">Random</Link></NavItem>
-                <NavItem><Link to="/all">All Questions</Link></NavItem>
-                <NavItem><Link to="/favorites">Favorites</Link></NavItem>
+                <NavItem><Link to="/" className="nav-a">Random</Link></NavItem>
+                <NavItem><Link to="/all" className="nav-a">All Questions</Link></NavItem>
+                <NavItem><Link to="/favorites" className="nav-a">Favorites</Link></NavItem>
               </Nav>
             </Navbar.Collapse>
           </Navbar>

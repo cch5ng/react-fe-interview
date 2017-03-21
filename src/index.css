@@ -40,12 +40,29 @@ div.navbar-collapse.collapse.in {
 a.nav-a:link,
 a.nav-a:active,
 a.nav-a:hover,
-a.nav-a:visited {
+a.nav-a:visited,
+a.a-fave:link,
+a.a-fave:active,
+a.a-fave:hover,
+a.a-fave:visited {
 	color: #1B1378;
 	text-decoration: none;
-	font-size: 1.25em;
-/*	color: #fff;*/
 }
+
+a.nav-a:link,
+a.nav-a:active,
+a.nav-a:hover,
+a.nav-a:visited {
+	font-size: 1.25em;
+}
+/*a.a-fave:link,
+a.a-fave:active,
+a.a-fave:hover,
+a.a-fave:visited {
+	color: #1B1378;
+	text-decoration: none;*/
+/*	color: #fff;
+}*/
 
 /* form */
 
@@ -73,6 +90,10 @@ button.btn-default {
 
 .center {
 	text-align: center;
+}
+
+.fa {
+	padding-left: 8px;
 }
 
 @media (min-width: 768px) {

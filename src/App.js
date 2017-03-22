@@ -21,9 +21,11 @@ class App extends Component {
     this.renderRandomQuestions = this.renderRandomQuestions.bind(this);
     this.renderQuestions = this.renderQuestions.bind(this);
     this.getMaxCountObj = this.getMaxCountObj.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
 
     var maxQuestionsObj = this.getMaxCountObj();
     maxQuestionsObj.display = 'all';
+    maxQuestionsObj.displaySearch = false;
     this.state = maxQuestionsObj;
   }
 
@@ -74,12 +76,13 @@ class App extends Component {
                 <NavItem><Link to="/" className="nav-a">Random</Link></NavItem>
                 <NavItem><Link to="/all" className="nav-a">All Questions</Link></NavItem>
                 <NavItem><Link to="/favorites" className="nav-a">Favorites</Link></NavItem>
-                <NavItem><i className="fa fa-search" aria-hidden="true"></i></NavItem>
-
-                
+                <NavItem><i className="fa fa-search fa-lg" onClick={this.handleSearch} aria-hidden="true"></i></NavItem>
               </Nav>
             </Navbar.Collapse>
           </Navbar>
+          <div className={this.state.displaySearch ? "nav-search search-display" : "nav-search search-hide"} >
+            just testing this out
+          </div>
           <main className="container-fluid">
             <Route exact path="/" component={RandomQuestions}/>
             <Route path="/all" component={AllQuestions}/>
@@ -126,6 +129,20 @@ class App extends Component {
     maxQuestionsObj.display = 'all';
 
     this.setState(maxQuestionsObj);
+  }
+
+  /**
+   * @param {}
+   * @return {}
+   * Event handler for button click (All Questions)
+   * 
+   * 
+   */
+  handleSearch() {
+    console.log('clicked search');
+    this.setState({
+      displaySearch: !this.state.displaySearch
+    })
   }
 
   // RENDER

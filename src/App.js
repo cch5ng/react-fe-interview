@@ -74,6 +74,9 @@ class App extends Component {
                 <NavItem><Link to="/" className="nav-a">Random</Link></NavItem>
                 <NavItem><Link to="/all" className="nav-a">All Questions</Link></NavItem>
                 <NavItem><Link to="/favorites" className="nav-a">Favorites</Link></NavItem>
+                <NavItem><i className="fa fa-search" aria-hidden="true"></i></NavItem>
+
+                
               </Nav>
             </Navbar.Collapse>
           </Navbar>

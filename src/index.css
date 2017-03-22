@@ -107,8 +107,52 @@ button.btn-default {
 	padding-left: 8px;
 }
 
-.fa-search {
+.fa-search,
+.fa-times {
 	color: #fff;
+}
+
+i.fa-times {
+	display: inline;
+}
+
+#input-search {
+	display: inline-block;
+	margin-top: 13px;
+	background-color: #1B1378;
+}
+
+.fa-times {
+	/*padding-top: 28px;*/
+}
+
+.fa-times {
+	text-align: right;
+	padding-left: 20px;
+}
+
+.input-search {
+	float: left;
+}
+
+input#input-search:focus{
+    outline: none;
+}
+
+input#input-search {
+    font-size: 24px;
+    padding: 10px;
+    border: none;
+
+    color: #fff;
+    text-shadow: 0px 0px 0px #000;
+    -webkit-text-fill-color: transparent;
+}
+
+input#input-search::-webkit-input-placeholder {
+    color: #fff;
+    text-shadow: none;
+    -webkit-text-fill-color: initial;
 }
 
 @media (min-width: 768px) {

@@ -81,7 +81,10 @@ class App extends Component {
             </Navbar.Collapse>
           </Navbar>
           <div className={this.state.displaySearch ? "nav-search search-display" : "nav-search search-hide"} >
-            just testing this out
+            <form>
+              <input type="text"  id="input-search" />
+              <i className="fa fa-times fa-2x" onClick={this.handleSearch} aria-hidden="true"></i>
+            </form>
           </div>
           <main className="container-fluid">
             <Route exact path="/" component={RandomQuestions}/>
@@ -143,6 +146,8 @@ class App extends Component {
     this.setState({
       displaySearch: !this.state.displaySearch
     })
+    document.getElementById('input-search').focus();
+    document.getElementById('input-search').select();
   }
 
   // RENDER

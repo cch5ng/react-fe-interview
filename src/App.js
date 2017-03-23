@@ -36,26 +36,13 @@ class App extends Component {
 
 // TODO refactor Favorites
   componentWillMount() {
-
-//TODO rather than set html in the state, store the base data and create html on the fly based on data
-/* 
-  {
-    link: '',
-    name: '',
-    key: ''
-  }
-
-*/
     let that = this;
     var savedLists = [];
     var renderSavedLists = [];
     let savedListsObjAr = [];
 
-//clicking search results multiple times gets no result (route updates not content)
-
     // The same code, but using ES6 Promises.
     localforage.iterate(function(value, key, iterationNumber) {
-
         savedLists.push([key, value]);
     }).then(function() {
         renderSavedLists = savedLists.map((list) => {
@@ -68,10 +55,6 @@ class App extends Component {
           listObj.key = list[0];
 
           return listObj;
-
-          //return (
-          //  <li key={list[0]} onClick={that.handleSearchLink}><Link to={link} className="a-fave" >{name}</Link></li>
-          //)
         })
 
         that.setState({
@@ -121,13 +104,11 @@ class App extends Component {
     });
 
     var searchResultsList;
-    //if (this.state.curListsObjAr.length) {
-      searchResultsList = this.state.curListsObjAr.map(function(listObj) {
-        return (
-          <li key={listObj.key} onClick={that.handleSearchLink}><Link to={listObj.link} className="a-fave" >{listObj.name}</Link></li>
-        )
-      })
-    //}
+    searchResultsList = this.state.curListsObjAr.map(function(listObj) {
+      return (
+        <li key={listObj.key} onClick={that.handleSearchLink}><Link to={listObj.link} className="a-fave" >{listObj.name}</Link></li>
+      )
+    })
 
     return (
       <Router db={this.props.db} >
@@ -231,14 +212,8 @@ class App extends Component {
    * 
    */
   handleSearchLink() {
-    console.log('clicked search link');
     this.handleSearch();
     window.location.reload();
-    // this.setState({
-    //   displaySearch: !this.state.displaySearch
-    // })
-    // document.getElementById('input-search').focus();
-    // document.getElementById('input-search').select();
   }
 
   /**
@@ -249,10 +224,8 @@ class App extends Component {
    * 
    */
   handleSearchFilter(e) {
-    console.log('gets to handleSearchFilter');
     let filteredLists = [];
     const searchInput = e.target.value;
-
 
     if (searchInput.length) {
       filteredLists = this.state.savedListsObjAr.filter((list) => {
@@ -263,13 +236,10 @@ class App extends Component {
         curListsObjAr: filteredLists
       })
     } else {
-      console.log('gets to line 267');
       this.setState({
         curListsObjAr: [] //this.state.savedListsObjAr
       })
     }
-    //document.getElementById('input-search').focus();
-    //document.getElementById('input-search').select();
   }
 
 
@@ -281,7 +251,6 @@ class App extends Component {
    * the question category
    */
   renderRandomQuestions() {
-    //console.log('renderRandomQuestions');
     var randomIdxList;
     var questionsList = h5bp_interview.questions.map((questionSet, idx) => {
       randomIdxList = getRandomIndexList(questionSet.id, this.state[questionSet.id]);
@@ -308,7 +277,6 @@ class App extends Component {
    */
   renderQuestions(idxCategory, idxList) {
     var list;
-    //console.log('idxList: ' + idxList);
     if (idxList) {
       list = idxList.map((idx) => {
         return (

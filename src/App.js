@@ -29,6 +29,8 @@ class App extends Component {
     var maxQuestionsObj = this.getMaxCountObj();
     maxQuestionsObj.display = 'all';
     maxQuestionsObj.displaySearch = false;
+    maxQuestionsObj.savedListsObjAr = [];
+    maxQuestionsObj.curListsObjAr = [];
     this.state = maxQuestionsObj;
   }
 
@@ -47,6 +49,7 @@ class App extends Component {
     let that = this;
     var savedLists = [];
     var renderSavedLists = [];
+    let savedListsObjAr = [];
 
 //clicking search results multiple times gets no result (route updates not content)
 
@@ -56,15 +59,24 @@ class App extends Component {
         savedLists.push([key, value]);
     }).then(function() {
         renderSavedLists = savedLists.map((list) => {
+          let listObj = {};
           let link = "/saved/" + list[0];
           let name = list[1].name;
-          return (
-            <li key={list[0]} onClick={that.handleSearchLink}><Link to={link} className="a-fave" >{name}</Link></li>
-          )
+
+          listObj.link = link;
+          listObj.name = name;
+          listObj.key = list[0];
+
+          return listObj;
+
+          //return (
+          //  <li key={list[0]} onClick={that.handleSearchLink}><Link to={link} className="a-fave" >{name}</Link></li>
+          //)
         })
 
         that.setState({
-          renderSavedLists: renderSavedLists
+          savedListsObjAr: renderSavedLists,
+          curListsObjAr: []//renderSavedLists
         })
 
     }).catch(function(err) {
@@ -76,6 +88,7 @@ class App extends Component {
 
 
   render() {
+    let that = this;
     var questionsInputList = h5bp_interview.questions.map((questionSet, idx) => {
       var max = h5bp_interview.questions[idx].question_list.length;
       return (
@@ -107,6 +120,15 @@ class App extends Component {
         ) 
     });
 
+    var searchResultsList;
+    //if (this.state.curListsObjAr.length) {
+      searchResultsList = this.state.curListsObjAr.map(function(listObj) {
+        return (
+          <li key={listObj.key} onClick={that.handleSearchLink}><Link to={listObj.link} className="a-fave" >{listObj.name}</Link></li>
+        )
+      })
+    //}
+
     return (
       <Router db={this.props.db} >
         <div>
@@ -133,7 +155,7 @@ class App extends Component {
             </form>
             <div className="search-results">
               <ul className="ul-no-style">
-                {this.state.renderSavedLists}
+                {searchResultsList.length ? searchResultsList : null}
               </ul>
             </div>
           </div>
@@ -227,22 +249,25 @@ class App extends Component {
    * 
    */
   handleSearchFilter(e) {
+    console.log('gets to handleSearchFilter');
     let filteredLists = [];
     const searchInput = e.target.value;
-//    console.log('key stroke in search input');
-//    console.log('e.target.value: ' + e.target.value);
 
-    console.log(this.state.renderSavedLists);
-    console.log('keys: ' + Object.keys(this.state.renderSavedLists[0]));
-    filteredLists = this.state.renderSavedLists.filter((list) => {
-      return (list.name.contains(searchInput))
-    })
 
-    console.log('this.state.renderSavedLists: ' + this.state.renderSavedLists);
-    console.log('key this.state.renderSavedLists[0]: ' + Object.keys(this.state.renderSavedLists[0]));
-    this.setState({
-      renderSavedLists: filteredLists
-    })
+    if (searchInput.length) {
+      filteredLists = this.state.savedListsObjAr.filter((list) => {
+        return (list.name.includes(searchInput))
+      })
+
+      this.setState({
+        curListsObjAr: filteredLists
+      })
+    } else {
+      console.log('gets to line 267');
+      this.setState({
+        curListsObjAr: [] //this.state.savedListsObjAr
+      })
+    }
     //document.getElementById('input-search').focus();
     //document.getElementById('input-search').select();
   }

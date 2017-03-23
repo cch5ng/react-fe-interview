@@ -145,7 +145,7 @@ input#input-search {
     border: none;
 
     color: #fff;
-    text-shadow: 0px 0px 0px #000;
+    text-shadow: 0px 0px 0px #fff;
     -webkit-text-fill-color: transparent;
 }
 
@@ -158,6 +158,9 @@ input#input-search::-webkit-input-placeholder {
 .search-results {
 	padding-top: 12px;
 	padding-left: 10px;
+	border: 1px solid #666;
+	border-top: none;
+	border-radius: 5px;
 }
 
 .ul-no-style {

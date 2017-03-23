@@ -24,6 +24,7 @@ class App extends Component {
     this.getMaxCountObj = this.getMaxCountObj.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.handleSearchLink = this.handleSearchLink.bind(this);
+    this.handleSearchFilter = this.handleSearchFilter.bind(this);
 
     var maxQuestionsObj = this.getMaxCountObj();
     maxQuestionsObj.display = 'all';
@@ -33,6 +34,16 @@ class App extends Component {
 
 // TODO refactor Favorites
   componentWillMount() {
+
+//TODO rather than set html in the state, store the base data and create html on the fly based on data
+/* 
+  {
+    link: '',
+    name: '',
+    key: ''
+  }
+
+*/
     let that = this;
     var savedLists = [];
     var renderSavedLists = [];
@@ -48,7 +59,7 @@ class App extends Component {
           let link = "/saved/" + list[0];
           let name = list[1].name;
           return (
-            <li key={uuid.v1()} onClick={that.handleSearchLink}><Link to={link} className="a-fave" >{name}</Link></li>
+            <li key={list[0]} onClick={that.handleSearchLink}><Link to={link} className="a-fave" >{name}</Link></li>
           )
         })
 
@@ -117,14 +128,13 @@ class App extends Component {
           </Navbar>
           <div className={this.state.displaySearch ? "nav-search search-display" : "nav-search search-hide"} >
             <form>
-              <input type="text"  id="input-search" />
+              <input type="text" id="input-search" onChange={this.handleSearchFilter} />
               <i className="fa fa-times fa-2x" onClick={this.handleSearch} aria-hidden="true"></i>
             </form>
             <div className="search-results">
               <ul className="ul-no-style">
                 {this.state.renderSavedLists}
               </ul>
-              just testing here
             </div>
           </div>
           <main className="container-fluid">
@@ -207,6 +217,34 @@ class App extends Component {
     // })
     // document.getElementById('input-search').focus();
     // document.getElementById('input-search').select();
+  }
+
+  /**
+   * @param {}
+   * @return {}
+   * Event handler for button click (All Questions)
+   * 
+   * 
+   */
+  handleSearchFilter(e) {
+    let filteredLists = [];
+    const searchInput = e.target.value;
+//    console.log('key stroke in search input');
+//    console.log('e.target.value: ' + e.target.value);
+
+    console.log(this.state.renderSavedLists);
+    console.log('keys: ' + Object.keys(this.state.renderSavedLists[0]));
+    filteredLists = this.state.renderSavedLists.filter((list) => {
+      return (list.name.contains(searchInput))
+    })
+
+    console.log('this.state.renderSavedLists: ' + this.state.renderSavedLists);
+    console.log('key this.state.renderSavedLists[0]: ' + Object.keys(this.state.renderSavedLists[0]));
+    this.setState({
+      renderSavedLists: filteredLists
+    })
+    //document.getElementById('input-search').focus();
+    //document.getElementById('input-search').select();
   }
 
 

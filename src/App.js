@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
 import uuid from 'node-uuid';
+import localforage from 'localforage';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import './App.css';
@@ -22,12 +23,46 @@ class App extends Component {
     this.renderQuestions = this.renderQuestions.bind(this);
     this.getMaxCountObj = this.getMaxCountObj.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
+    this.handleSearchLink = this.handleSearchLink.bind(this);
 
     var maxQuestionsObj = this.getMaxCountObj();
     maxQuestionsObj.display = 'all';
     maxQuestionsObj.displaySearch = false;
     this.state = maxQuestionsObj;
   }
+
+// TODO refactor Favorites
+  componentWillMount() {
+    let that = this;
+    var savedLists = [];
+    var renderSavedLists = [];
+
+//clicking search results multiple times gets no result (route updates not content)
+
+    // The same code, but using ES6 Promises.
+    localforage.iterate(function(value, key, iterationNumber) {
+
+        savedLists.push([key, value]);
+    }).then(function() {
+        renderSavedLists = savedLists.map((list) => {
+          let link = "/saved/" + list[0];
+          let name = list[1].name;
+          return (
+            <li key={uuid.v1()} onClick={that.handleSearchLink}><Link to={link} className="a-fave" >{name}</Link></li>
+          )
+        })
+
+        that.setState({
+          renderSavedLists: renderSavedLists
+        })
+
+    }).catch(function(err) {
+        // This code runs if there were any errors
+        console.log(err);
+    });
+
+  }
+
 
   render() {
     var questionsInputList = h5bp_interview.questions.map((questionSet, idx) => {
@@ -54,7 +89,7 @@ class App extends Component {
           <h4>{questionSet.category}</h4>
           <ul>
             {questionSet.question_list.map(function(question) {
-              return <li key={uuid.v1()}>{question}</li>
+              return <li key={uuid.v1()} >{question}</li>
             })}
           </ul>
           </div>
@@ -67,7 +102,7 @@ class App extends Component {
           <Navbar className="App-header" collapseOnSelect>
             <Navbar.Header>
               <Navbar.Brand>
-                <Link to="/">Front End Interview Questions</Link>
+                <Link to="/">Front End Interview</Link>
               </Navbar.Brand>
               <Navbar.Toggle />
             </Navbar.Header>
@@ -85,6 +120,12 @@ class App extends Component {
               <input type="text"  id="input-search" />
               <i className="fa fa-times fa-2x" onClick={this.handleSearch} aria-hidden="true"></i>
             </form>
+            <div className="search-results">
+              <ul className="ul-no-style">
+                {this.state.renderSavedLists}
+              </ul>
+              just testing here
+            </div>
           </div>
           <main className="container-fluid">
             <Route exact path="/" component={RandomQuestions}/>
@@ -149,6 +190,25 @@ class App extends Component {
     document.getElementById('input-search').focus();
     document.getElementById('input-search').select();
   }
+
+  /**
+   * @param {}
+   * @return {}
+   * Event handler for button click (All Questions)
+   * 
+   * 
+   */
+  handleSearchLink() {
+    console.log('clicked search link');
+    this.handleSearch();
+    window.location.reload();
+    // this.setState({
+    //   displaySearch: !this.state.displaySearch
+    // })
+    // document.getElementById('input-search').focus();
+    // document.getElementById('input-search').select();
+  }
+
 
   // RENDER
   /**

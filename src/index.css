@@ -8,9 +8,28 @@ body {
 	text-align: left;
 }
 
-.App-header {
+.App-header,
+.nav-search {
 	background-color: #1B1378;
 	height: 75px;
+}
+
+.nav-search {
+	width: 410px;
+}
+
+.search-hide {
+	position: absolute;
+	top: 0;
+	left: calc(100% + 5px);
+	z-index: 5;
+}
+
+.search-display {
+	position: absolute;
+	top: 0;
+	left: calc(100%  - 415px);
+	z-index: 5;
 }
 
 h2 {
@@ -55,14 +74,6 @@ a.nav-a:hover,
 a.nav-a:visited {
 	font-size: 1.25em;
 }
-/*a.a-fave:link,
-a.a-fave:active,
-a.a-fave:hover,
-a.a-fave:visited {
-	color: #1B1378;
-	text-decoration: none;*/
-/*	color: #fff;
-}*/
 
 /* form */
 
@@ -94,6 +105,67 @@ button.btn-default {
 
 .fa {
 	padding-left: 8px;
+}
+
+.fa-search,
+.fa-times {
+	color: #fff;
+}
+
+i.fa-times {
+	display: inline;
+}
+
+#input-search {
+	display: inline-block;
+	margin-top: 13px;
+	background-color: #1B1378;
+}
+
+.fa-times {
+	/*padding-top: 28px;*/
+}
+
+.fa-times {
+	text-align: right;
+	padding-left: 20px;
+}
+
+.input-search {
+	float: left;
+}
+
+input#input-search:focus{
+    outline: none;
+}
+
+input#input-search {
+    font-size: 24px;
+    padding: 10px;
+    border: none;
+
+    color: #fff;
+    text-shadow: 0px 0px 0px #fff;
+    -webkit-text-fill-color: transparent;
+}
+
+input#input-search::-webkit-input-placeholder {
+    color: #fff;
+    text-shadow: none;
+    -webkit-text-fill-color: initial;
+}
+
+.search-results {
+	padding-top: 12px;
+	padding-left: 10px;
+	border: 1px solid #666;
+	border-top: none;
+	border-radius: 5px;
+}
+
+.ul-no-style {
+	list-style: none;
+	padding-left: 0;
 }
 
 @media (min-width: 768px) {

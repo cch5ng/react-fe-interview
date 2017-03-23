@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
 import uuid from 'node-uuid';
+import localforage from 'localforage';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import './App.css';
@@ -21,13 +22,56 @@ class App extends Component {
     this.renderRandomQuestions = this.renderRandomQuestions.bind(this);
     this.renderQuestions = this.renderQuestions.bind(this);
     this.getMaxCountObj = this.getMaxCountObj.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
+    this.handleSearchLink = this.handleSearchLink.bind(this);
+    this.handleSearchFilter = this.handleSearchFilter.bind(this);
 
     var maxQuestionsObj = this.getMaxCountObj();
     maxQuestionsObj.display = 'all';
+    maxQuestionsObj.displaySearch = false;
+    maxQuestionsObj.savedListsObjAr = [];
+    maxQuestionsObj.curListsObjAr = [];
     this.state = maxQuestionsObj;
   }
 
+// TODO refactor Favorites
+  componentWillMount() {
+    let that = this;
+    var savedLists = [];
+    var renderSavedLists = [];
+    let savedListsObjAr = [];
+
+    // The same code, but using ES6 Promises.
+    localforage.iterate(function(value, key, iterationNumber) {
+        savedLists.push([key, value]);
+    }).then(function() {
+        renderSavedLists = savedLists.map((list) => {
+          let listObj = {};
+          let link = "/saved/" + list[0];
+          let name = list[1].name;
+
+          listObj.link = link;
+          listObj.name = name;
+          listObj.key = list[0];
+
+          return listObj;
+        })
+
+        that.setState({
+          savedListsObjAr: renderSavedLists,
+          curListsObjAr: []//renderSavedLists
+        })
+
+    }).catch(function(err) {
+        // This code runs if there were any errors
+        console.log(err);
+    });
+
+  }
+
+
   render() {
+    let that = this;
     var questionsInputList = h5bp_interview.questions.map((questionSet, idx) => {
       var max = h5bp_interview.questions[idx].question_list.length;
       return (
@@ -52,12 +96,19 @@ class App extends Component {
           <h4>{questionSet.category}</h4>
           <ul>
             {questionSet.question_list.map(function(question) {
-              return <li key={uuid.v1()}>{question}</li>
+              return <li key={uuid.v1()} >{question}</li>
             })}
           </ul>
           </div>
         ) 
     });
+
+    var searchResultsList;
+    searchResultsList = this.state.curListsObjAr.map(function(listObj) {
+      return (
+        <li key={listObj.key} onClick={that.handleSearchLink}><Link to={listObj.link} className="a-fave" >{listObj.name}</Link></li>
+      )
+    })
 
     return (
       <Router db={this.props.db} >
@@ -65,7 +116,7 @@ class App extends Component {
           <Navbar className="App-header" collapseOnSelect>
             <Navbar.Header>
               <Navbar.Brand>
-                <Link to="/">Front End Interview Questions</Link>
+                <Link to="/">Front End Interview</Link>
               </Navbar.Brand>
               <Navbar.Toggle />
             </Navbar.Header>
@@ -74,9 +125,21 @@ class App extends Component {
                 <NavItem><Link to="/" className="nav-a">Random</Link></NavItem>
                 <NavItem><Link to="/all" className="nav-a">All Questions</Link></NavItem>
                 <NavItem><Link to="/favorites" className="nav-a">Favorites</Link></NavItem>
+                <NavItem><i className="fa fa-search fa-lg" onClick={this.handleSearch} aria-hidden="true"></i></NavItem>
               </Nav>
             </Navbar.Collapse>
           </Navbar>
+          <div className={this.state.displaySearch ? "nav-search search-display" : "nav-search search-hide"} >
+            <form>
+              <input type="text" id="input-search" onChange={this.handleSearchFilter} />
+              <i className="fa fa-times fa-2x" onClick={this.handleSearch} aria-hidden="true"></i>
+            </form>
+            <div className="search-results">
+              <ul className="ul-no-style">
+                {searchResultsList.length ? searchResultsList : null}
+              </ul>
+            </div>
+          </div>
           <main className="container-fluid">
             <Route exact path="/" component={RandomQuestions}/>
             <Route path="/all" component={AllQuestions}/>
@@ -125,6 +188,61 @@ class App extends Component {
     this.setState(maxQuestionsObj);
   }
 
+  /**
+   * @param {}
+   * @return {}
+   * Event handler for button click (All Questions)
+   * 
+   * 
+   */
+  handleSearch() {
+    console.log('clicked search');
+    this.setState({
+      displaySearch: !this.state.displaySearch
+    })
+    document.getElementById('input-search').focus();
+    document.getElementById('input-search').select();
+  }
+
+  /**
+   * @param {}
+   * @return {}
+   * Event handler for button click (All Questions)
+   * 
+   * 
+   */
+  handleSearchLink() {
+    this.handleSearch();
+    window.location.reload();
+  }
+
+  /**
+   * @param {}
+   * @return {}
+   * Event handler for button click (All Questions)
+   * 
+   * 
+   */
+  handleSearchFilter(e) {
+    let filteredLists = [];
+    const searchInput = e.target.value;
+
+    if (searchInput.length) {
+      filteredLists = this.state.savedListsObjAr.filter((list) => {
+        return (list.name.includes(searchInput))
+      })
+
+      this.setState({
+        curListsObjAr: filteredLists
+      })
+    } else {
+      this.setState({
+        curListsObjAr: [] //this.state.savedListsObjAr
+      })
+    }
+  }
+
+
   // RENDER
   /**
    * @param {}
@@ -133,7 +251,6 @@ class App extends Component {
    * the question category
    */
   renderRandomQuestions() {
-    //console.log('renderRandomQuestions');
     var randomIdxList;
     var questionsList = h5bp_interview.questions.map((questionSet, idx) => {
       randomIdxList = getRandomIndexList(questionSet.id, this.state[questionSet.id]);
@@ -160,7 +277,6 @@ class App extends Component {
    */
   renderQuestions(idxCategory, idxList) {
     var list;
-    //console.log('idxList: ' + idxList);
     if (idxList) {
       list = idxList.map((idx) => {
         return (

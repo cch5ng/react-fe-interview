@@ -41,6 +41,8 @@ class Child extends Component {
   componentWillMount() {
     let that = this;
 
+    //test
+    //window.location.reload();
     localforage.getItem(this.listId).then(function(value) {
         // This code runs once the value has been loaded
         // from the offline store.
@@ -48,7 +50,8 @@ class Child extends Component {
         that.setState({
           name: value.name,
           questions: value.questions
-        })
+        });
+
     }).catch(function(err) {
         // This code runs if there were any errors
         console.log(err);
@@ -75,7 +78,7 @@ class Child extends Component {
                 <ul>
                 {questions.map(function(question, idx2) {
                   return (
-                    <li>{question}</li>
+                    <li key={uuid.v1()}>{question}</li>
                   )
                 })}
                 </ul>

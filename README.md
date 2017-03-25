@@ -24,8 +24,11 @@ Using node v6.9.2 (via nvm)
 * Known issue: while you can access the demo using the url, http://cch5ng.github.io/react-frontend-interview2 there is an issue where the first view doesn't render until you click the logo or another nav link. The reason is that I'm redirecting my github projects to my private domain but this conflicts with the routes set up for react-router. Sorry! I will look into a fix <3
 
 Prereq to run the application locally
+
 1 From the terminal: `npm install`
+
 2 `npm run build`
+
 3 `npm start`
 
 ===

@@ -15,6 +15,7 @@ class Child extends Component {
     this.listId = this.props.match.url.split('/')[2];
 
     this.state = {
+      viewState: 'read', //read | write
       GeneralQuestions: [],
       HTMLQuestions: [],
       CSSQuestions: [],
@@ -24,14 +25,16 @@ class Child extends Component {
       NetworkQuestions: []
     }
 
-    // this.handleChange = this.handleChange.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     // this.handleSaveButton = this.handleSaveButton.bind(this);
     //this.handleAllButton = this.handleAllButton.bind(this);
-    //this.renderRandomQuestions = this.renderRandomQuestions.bind(this);
-    //this.renderQuestions = this.renderQuestions.bind(this);
+    this.renderEditQuestions = this.renderEditQuestions.bind(this);
+    this.renderQuestions = this.renderQuestions.bind(this);
     //this.getMaxCountObj = this.getMaxCountObj.bind(this);
     // this.concatCategory = this.concatCategory.bind(this);
     // this.removeArrayItem = this.removeArrayItem.bind(this);
+    this.handleViewMenu = this.handleViewMenu.bind(this);
+    this.isChecked = this.isChecked.bind(this);
 
     // var maxQuestionsObj = this.getMaxCountObj();
     // maxQuestionsObj.display = 'all';
@@ -43,19 +46,25 @@ class Child extends Component {
 
     //test
     //window.location.reload();
-    localforage.getItem(this.listId).then(function(value) {
-        // This code runs once the value has been loaded
-        // from the offline store.
-        console.log(value);
-        that.setState({
-          name: value.name,
-          questions: value.questions
-        });
+    if (this.state.viewState === 'read') {
+      localforage.getItem(this.listId).then(function(value) {
+          // This code runs once the value has been loaded
+          // from the offline store.
+          console.log(value);
+          that.setState({
+            name: value.name,
+            questions: value.questions
+            // questions is [{'category': [question_string1, question_string2]}]
+          });
 
-    }).catch(function(err) {
-        // This code runs if there were any errors
-        console.log(err);
-    });
+      }).catch(function(err) {
+          // This code runs if there were any errors
+          console.log(err);
+      });
+    }
+    if (this.state.viewState === 'edit') {
+      console.log('do something for edit view')
+    }
   }
 
   render() {
@@ -90,11 +99,14 @@ class Child extends Component {
       });
     }
 
+//this.state.questions && 
     return (
       <div>
-        <h3>List: {this.state.name}</h3>
-          {this.state.questions ? questionsList : null}
-
+        <h3>{this.state.name} List</h3>
+          <div>
+            {this.state.viewState === 'read' ? <div className="right" onClick={this.handleViewMenu}><span id="edit-link">Edit</span> | <span id="delete-link">Delete</span></div> : <div className="right" onClick={this.handleViewMenu}><span id="read-link">Read</span> | <span id="delete-link">Delete</span></div>}
+            {this.state.viewState === 'read' ? questionsList : this.renderEditQuestions()}
+          </div>
       </div>
     );
   }
@@ -106,40 +118,66 @@ class Child extends Component {
    * Event handler for input field update (number change)
    * update state which tracks all currently checked questions
    */
-  // handleChange(e) {
-  //   const shortCategory = this.concatCategory(e.target.classList);
-  //   const label = e.target.parentElement;
-  //   const question = label.innerText;
-  //   let questionsAr = [];
-  //   let questionsObj = {};
-  //   let questionIdx;
+  handleViewMenu(e) {
+    console.log('got to handleViewMenu');
+    console.log('e.target.id: ' + e.target.id);
+    switch(e.target.id) {
+      case 'edit-link':
+        this.setState({
+          viewState: 'edit'
+        })
+        console.log('got to edit-link')
+        break;
+      case 'delete-link':
+        console.log('got to delete-link')
+        break;
+      case 'read-link':
+        this.setState({
+          viewState: 'read'
+        })
+        console.log('got to read-link')
+        break;
+      default:
+        break;
+    }
+  }
 
-  //   //console.log('shortCategory: ' + shortCategory);
-  //   //console.log('question: ' + question);
 
-  //   if (e.target.checked) {
-  //     //add question to array
-  //     questionsAr = this.state[shortCategory] ? this.state[shortCategory].slice(0) : [];
-  //     questionsAr.push(question);
-  //     questionsObj[shortCategory] = questionsAr;
-  //     this.setState(questionsObj);
-  //   } else {
-  //     //remove question from array
-  //     questionsAr = this.state[shortCategory] ? this.state[shortCategory].slice(0) : [];
-  //     if (questionsAr.indexOf(question) > -1) {
-  //       questionsAr = this.removeArrayItem(questionsAr, questionsAr.indexOf(question));
-  //     }
-  //     questionsObj[shortCategory] = questionsAr;
-  //     this.setState(questionsObj);
 
-  //   }
+  /**
+   * @param {event}
+   * @return {}
+   * Event handler for input field update (number change)
+   * update state which tracks all currently checked questions
+   */
+  handleChange(e) {
+    const shortCategory = this.concatCategory(e.target.classList);
+    const label = e.target.parentElement;
+    const question = label.innerText;
+    let questionsAr = [];
+    let questionsObj = {};
+    let questionIdx;
 
-  //   //console.log('this.state[shortCategory]: ' + this.state[shortCategory]);
+    //console.log('shortCategory: ' + shortCategory);
+    //console.log('question: ' + question);
 
-  //   //var inputState = {};
-  //   //inputState[e.target.id] = e.target.value;
-  //   //this.setState(inputState);
-  // }
+    if (e.target.checked) {
+      //add question to array
+      questionsAr = this.state[shortCategory] ? this.state[shortCategory].slice(0) : [];
+      questionsAr.push(question);
+      questionsObj[shortCategory] = questionsAr;
+      this.setState(questionsObj);
+    } else {
+      //remove question from array
+      questionsAr = this.state[shortCategory] ? this.state[shortCategory].slice(0) : [];
+      if (questionsAr.indexOf(question) > -1) {
+        questionsAr = this.removeArrayItem(questionsAr, questionsAr.indexOf(question));
+      }
+      questionsObj[shortCategory] = questionsAr;
+      this.setState(questionsObj);
+
+    }
+  }
 
   /**
    * @param {}
@@ -199,25 +237,51 @@ class Child extends Component {
    * Iterates over the list of list of questions and renders
    * the question category
    */
-  // renderRandomQuestions() {
-  //   //console.log('renderRandomQuestions');
-  //   var randomIdxList;
-  //   var questionsList = h5bp_interview.questions.map((questionSet, idx) => {
-  //     randomIdxList = getRandomIndexList(questionSet.id, this.state[questionSet.id]);
-  //     var randomQuestions = this.renderQuestions(idx, randomIdxList);
-  //     //console.log('randomIdxList: ' + randomIdxList);
-  //     return (
-  //       <div>
-  //         <h4>{questionSet.category}</h4>
-  //         <ul>
-  //           {randomQuestions}
-  //         </ul>
-  //       </div>
-  //     )
-  //   });
+  renderEditQuestions() {
+    let that = this;
 
-  //   return questionsList;
-  // }
+    var questionsList = h5bp_interview.questions.map(function(questionSet, idx) {
+      return (
+        <div key={questionSet.category} className="p-left">
+          <h4>{questionSet.category}</h4>
+          <div className="form-group">
+            {questionSet.question_list.map(function(question, idx2) {
+              return (
+                <div className="checkbox" key={questionSet.category+idx2}>
+                  <label id={questionSet.category+idx2}>
+                    <input type="checkbox" className={questionSet.category} value="on" onChange={that.handleChange} checked={that.isChecked} />
+                      {question}
+                  </label>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+        ) 
+    });
+
+
+
+
+
+    // //console.log('renderRandomQuestions');
+    // var randomIdxList;
+    // var questionsList = h5bp_interview.questions.map((questionSet, idx) => {
+    //   //randomIdxList = getRandomIndexList(questionSet.id, this.state[questionSet.id]);
+    //   var editQuestions = this.renderQuestions(idx);
+    //   //console.log('randomIdxList: ' + randomIdxList);
+    //   return (
+    //     <div>
+    //       <h4>{questionSet.category}</h4>
+    //       <ul>
+    //         {editQuestions}
+    //       </ul>
+    //     </div>
+    //   )
+    // });
+
+    return questionsList;
+  }
 
   /**
    * @param {int} index for particular category of questions in h5bp_interview.json
@@ -225,21 +289,34 @@ class Child extends Component {
    * @return {string} HTML list of random questions by index values
    *
    */
-  // renderQuestions(idxCategory, idxList) {
-  //   var list;
-  //   //console.log('idxList: ' + idxList);
-  //   if (idxList) {
-  //     list = idxList.map((idx) => {
-  //       return (
-  //         <li key={uuid.v1()}>{h5bp_interview.questions[idxCategory].question_list[idx]}</li>
-  //       )
-  //     })
-  //   }
+  renderQuestions(idxCategory) {
+    var list;
+    console.log('idxCategory: ' + idxCategory);
+    //console.log('idxList: ' + idxList);
+    //if (idxList) {
+      // list = idxList.map((idx) => {
+      //   return (
+      //     <li key={uuid.v1()}>{h5bp_interview.questions[idxCategory].question_list[idx]}</li>
+      //   )
+      // })
+    //}
 
-  //   return list;
-  // }
+    return list;
+  }
+
+  //placeholder
+
 
   // HELPER
+  /**
+   * @param {}
+   * @return {}
+   *
+   */
+  isChecked() {
+    return true;
+  }
+
   /**
    * @param {}
    * @return {}

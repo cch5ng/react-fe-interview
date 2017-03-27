@@ -26,7 +26,7 @@ class Child extends Component {
     }
 
     this.handleChange = this.handleChange.bind(this);
-    // this.handleSaveButton = this.handleSaveButton.bind(this);
+    this.handleSaveButton = this.handleSaveButton.bind(this);
     //this.handleAllButton = this.handleAllButton.bind(this);
     this.renderEditQuestions = this.renderEditQuestions.bind(this);
     this.renderQuestions = this.renderQuestions.bind(this);
@@ -105,7 +105,9 @@ class Child extends Component {
         <h3>{this.state.name} List</h3>
           <div>
             {this.state.viewState === 'read' ? <div className="right" onClick={this.handleViewMenu}><span id="edit-link">Edit</span> | <span id="delete-link">Delete</span></div> : <div className="right" onClick={this.handleViewMenu}><span id="read-link">Read</span> | <span id="delete-link">Delete</span></div>}
+            {this.state.viewState === 'edit' ? <Button className="button" onClick={this.handleSaveButton}>Save List</Button> : null}
             {this.state.viewState === 'read' ? questionsList : this.renderEditQuestions()}
+            {this.state.viewState === 'edit' ? <Button className="button" onClick={this.handleSaveButton}>Save List</Button> : null}
           </div>
       </div>
     );
@@ -184,37 +186,37 @@ class Child extends Component {
    * @return {}
    * Event handler for button click (Get Random Questions)
    */
-  // handleSaveButton(e) {
-  //   console.log('clicked Save');
-  //   const listNameInput = document.getElementById('list-name-inp');
-  //   var listObj = {};
-  //   let questionsAr = [];
-  //   let db;
-  //   const key = uuid.v1();
+  handleSaveButton(e) {
+    console.log('clicked Save');
+    const listNameInput = document.getElementById('list-name-inp');
+    var listObj = {};
+    let questionsAr = [];
+    let db;
+    const key = uuid.v1();
 
-  //   console.log('listNameInput.value: ' + listNameInput.value)
+    console.log('listNameInput.value: ' + listNameInput.value)
 
-  //   CATEGORIES.forEach((categ) => {
-  //     let categObj = {};
-  //     categObj[categ] = this.state[categ];
-  //     questionsAr.push(categObj);
-  //   })
+    CATEGORIES.forEach((categ) => {
+      let categObj = {};
+      categObj[categ] = this.state[categ];
+      questionsAr.push(categObj);
+    })
 
-  //   listObj.name = listNameInput.value;
-  //   listObj.questions = questionsAr;
+    listObj.name = listNameInput.value;
+    listObj.questions = questionsAr;
 
-  //   localforage.setItem(key, listObj).then(function(value) {
-  //     console.log('set new list');
-  //   }).catch(function(err) {
-  //     // This code runs if there were any errors
-  //     console.log(err);
-  //   });
+    localforage.setItem(key, listObj).then(function(value) {
+      console.log('set new list');
+    }).catch(function(err) {
+      // This code runs if there were any errors
+      console.log(err);
+    });
 
 
-  //   // this.setState({
-  //   //   display: 'random'
-  //   // });
-  // }
+    // this.setState({
+    //   display: 'random'
+    // });
+  }
 
   /**
    * @param {}
@@ -249,7 +251,7 @@ class Child extends Component {
               return (
                 <div className="checkbox" key={questionSet.category+idx2}>
                   <label id={questionSet.category+idx2}>
-                    <input type="checkbox" className={questionSet.category} value="on" onChange={that.handleChange} checked={that.isChecked} />
+                    <input type="checkbox" className={questionSet.category} value="on" onChange={that.handleChange} checked={that.isChecked(questionSet.category, question)} />
                       {question}
                   </label>
                 </div>
@@ -313,8 +315,23 @@ class Child extends Component {
    * @return {}
    *
    */
-  isChecked() {
-    return true;
+  isChecked(category, question) {
+    let checked = false;
+
+    for (let i = 0; i < this.state.questions.length; i++) {
+      //console.log('Object.keys(this.state.questions[i]): ' + Object.keys(this.state.questions[i]));
+      //console.log('category: ' + category);
+      let categTrimMiddle = category.split(' ').join('');
+      if (Object.keys(this.state.questions[i]).indexOf(categTrimMiddle) > -1) {
+        if (this.state.questions[i][categTrimMiddle].indexOf(question) > -1) {
+          return true;
+        } else {
+          return checked;
+        }
+        break;
+      }
+    }
+    return checked;
   }
 
   /**

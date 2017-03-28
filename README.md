@@ -17,13 +17,15 @@ Using node v6.9.2 (via nvm)
 
 [localforage](https://github.com/localForage/localForage/blob/master/docs/api.md) - this is a really handy library with a much easier api to use than the original indexedDB api
 
-[gh pages module](https://medium.freecodecamp.com/surge-vs-github-pages-deploying-a-create-react-app-project-c0ecbf317089#.v5vwn6ddr) - I'm using an npm module that allows easier hosting of react applications on github pages
+[surge module](https://medium.freecodecamp.com/surge-vs-github-pages-deploying-a-create-react-app-project-c0ecbf317089) - I'm using an npm module that allows easier hosting of react-router applications on a 3rd party host
 
 ### Running the Application
 
-* Known issue: while you can access the demo using the url, http://cch5ng.github.io/react-fe-interview there is an issue where the first view doesn't render until you click the logo or another nav link. The reason is that I'm redirecting my github projects to my private domain but this conflicts with the routes set up for react-router. Sorry! I will look into a fix <3
+[demo version](http://fe-interview-react.surge.sh/)
 
-Prereq to run the application locally
+* Known issue: currently filtering on the surge host is not working; it does work when the application is run on a local server... looking into this, sorry!
+
+Running the application locally
 
 1 From the terminal: `npm install`
 

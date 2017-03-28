@@ -47,11 +47,12 @@ class Child extends Component {
     //test
     //window.location.reload();
     //if (this.state.viewState === 'read') {
-      localforage.getItem(this.listId).then(function(value) {
+      localforage.getItem(that.listId).then(function(value) {
           // This code runs once the value has been loaded
           // from the offline store.
           console.log(value);
           let stateObj = {};
+          stateObj.key = that.listId;
           stateObj.name = value.name;
           stateObj.questions = value.questions;
           for (let i = 0; i < value.questions.length; i++) {
@@ -211,13 +212,13 @@ class Child extends Component {
    */
   handleSaveButton(e) {
     console.log('clicked Save');
-    const listNameInput = document.getElementById('list-name-inp');
+    //const listNameInput = document.getElementById('list-name-inp');
     var listObj = {};
     let questionsAr = [];
     let db;
-    const key = uuid.v1();
+    const key = this.state.key;
 
-    console.log('listNameInput.value: ' + listNameInput.value)
+    // console.log('listNameInput.value: ' + listNameInput.value)
 
     CATEGORIES.forEach((categ) => {
       let categObj = {};
@@ -225,20 +226,17 @@ class Child extends Component {
       questionsAr.push(categObj);
     })
 
-    listObj.name = listNameInput.value;
+    listObj.name = this.state.name;
     listObj.questions = questionsAr;
 
+//TODO 032717 need to update this to update an existing entry (this is probably creating a new one)
     localforage.setItem(key, listObj).then(function(value) {
-      console.log('set new list');
+      console.log('update list');
     }).catch(function(err) {
       // This code runs if there were any errors
       console.log(err);
     });
 
-
-    // this.setState({
-    //   display: 'random'
-    // });
   }
 
   /**

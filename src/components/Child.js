@@ -7,6 +7,7 @@ import localforage from 'localforage';
 import '../App.css';
 import h5bp_interview from '../utilities/h5bp_interview.json';
 import { CATEGORIES } from '../utilities/constants';
+import { getCategoriesList, shortCategory } from '../utilities';
 
 class Child extends Component {
   constructor(props) {
@@ -44,85 +45,47 @@ class Child extends Component {
   componentWillMount() {
     let that = this;
 
-    //test
-    //window.location.reload();
-    //if (this.state.viewState === 'read') {
-      localforage.getItem(that.listId).then(function(value) {
-          // This code runs once the value has been loaded
-          // from the offline store.
-          console.log(value);
-          let stateObj = {};
-          stateObj.key = that.listId;
-          stateObj.name = value.name;
-          stateObj.questions = value.questions;
-          for (let i = 0; i < value.questions.length; i++) {
-            let categ = Object.keys(value.questions[i])[0];
-            console.log('categ: ' + categ);
-            console.log('type categ: ' + typeof categ);
-            console.log('value.questions[i][categ]: ' + value.questions[i][categ]);
-            stateObj[categ] = value.questions[i][categ] || [];
-          }
+    localforage.getItem(that.listId).then(function(value) {
+      let stateObj = {};
+      stateObj.key = that.listId;
+      stateObj.name = value.name;
+      stateObj.questions = value.questions;
+      for (let i = 0; i < value.questions.length; i++) {
+        let categ = Object.keys(value.questions[i])[0];
+        stateObj[categ] = value.questions[i][categ] || [];
+      }
 
-          that.setState(stateObj);
-
-
-          //that.setState({
-            //name: value.name,
-
-//maybe make questions into a different format
-/*{
-  'category1': [question_string1, question_string2],
-  'category2': [question_string1, question_string2]
-}
-*/
-            //questions: value.questions
-            // questions is [{'category': [question_string1, question_string2]}]
-          //});
-          console.log('this.state.GeneralQuestions: ' + that.state['GeneralQuestions'])
-
-      }).catch(function(err) {
-          // This code runs if there were any errors
-          console.log(err);
-      });
-   // }
-   // if (this.state.viewState === 'edit') {
-   //   console.log('do something for edit view')
-   // }
+      that.setState(stateObj);
+    }).catch(function(err) {
+        // This code runs if there were any errors
+        console.log(err);
+    });
   }
 
   render() {
     var that = this;
     var category;
-    var questions = [];
-    if (this.state.questions) {
-      var questionsList = this.state.questions.map(function(questionObj, idx) {
-        for (let key in questionObj) {
-          category = key;
-          //console.log('category: ' + category);
-          questions = questionObj[key];
-          //console.log('questions.length: ' + questions.length);
-        }
+    let categoriesList = getCategoriesList();
 
-        if (questions.length) {
-          return (
-            <div key={category} className="p-left">
-              <h4>{category}</h4>
-                <ul>
-                {questions.map(function(question, idx2) {
-                  return (
-                    <li key={uuid.v1()}>{question}</li>
-                  )
-                })}
-                </ul>
-            </div>
-          )
-        } else {
+    var questionsList = categoriesList.map((categ) => {
+      if (this.state[shortCategory(categ)].length) {
+        return (
+          <div key={categ} className="p-left">
+            <h4>{categ}</h4>
+              <ul>
+              {this.state[shortCategory(categ)].map(function(question, idx2) {
+                return (
+                  <li key={uuid.v1()}>{question}</li>
+                )
+              })}
+              </ul>
+          </div>
+        )
+      } else {
           return null
-        }
-      });
-    }
+      }
+    })
 
-//this.state.questions && 
     return (
       <div>
         <h3>{this.state.name} List</h3>

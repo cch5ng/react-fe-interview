@@ -24,6 +24,5 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "clean": "rm -rf node_modules/gh-pages/.cache"
-  },
-  "homepage": "http://react-fe-interview.carolchung.com"
+  }
 }

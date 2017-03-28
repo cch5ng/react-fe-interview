@@ -1,4 +1,4 @@
-### react-frontend-interview2 (wip)
+### react-fe-interview (wip)
 
 * This is a version of a Front End Technical Interview app which generates random test questions (for interviewer or candidate preparing for interviews)
 
@@ -21,7 +21,7 @@ Using node v6.9.2 (via nvm)
 
 ### Running the Application
 
-* Known issue: while you can access the demo using the url, http://cch5ng.github.io/react-frontend-interview2 there is an issue where the first view doesn't render until you click the logo or another nav link. The reason is that I'm redirecting my github projects to my private domain but this conflicts with the routes set up for react-router. Sorry! I will look into a fix <3
+* Known issue: while you can access the demo using the url, http://cch5ng.github.io/react-fe-interview there is an issue where the first view doesn't render until you click the logo or another nav link. The reason is that I'm redirecting my github projects to my private domain but this conflicts with the routes set up for react-router. Sorry! I will look into a fix <3
 
 Prereq to run the application locally
 

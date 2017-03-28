@@ -25,5 +25,5 @@
     "deploy": "gh-pages -d build",
     "clean": "rm -rf node_modules/gh-pages/.cache"
   },
-  "homepage": "https://cch5ng.github.io/react-fe-interview"
+  "homepage": "http://react-fe-interview.carolchung.com"
 }

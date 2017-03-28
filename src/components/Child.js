@@ -46,25 +46,47 @@ class Child extends Component {
 
     //test
     //window.location.reload();
-    if (this.state.viewState === 'read') {
+    //if (this.state.viewState === 'read') {
       localforage.getItem(this.listId).then(function(value) {
           // This code runs once the value has been loaded
           // from the offline store.
           console.log(value);
-          that.setState({
-            name: value.name,
-            questions: value.questions
+          let stateObj = {};
+          stateObj.name = value.name;
+          stateObj.questions = value.questions;
+          for (let i = 0; i < value.questions.length; i++) {
+            let categ = Object.keys(value.questions[i])[0];
+            console.log('categ: ' + categ);
+            console.log('type categ: ' + typeof categ);
+            console.log('value.questions[i][categ]: ' + value.questions[i][categ]);
+            stateObj[categ] = value.questions[i][categ] || [];
+          }
+
+          that.setState(stateObj);
+
+
+          //that.setState({
+            //name: value.name,
+
+//maybe make questions into a different format
+/*{
+  'category1': [question_string1, question_string2],
+  'category2': [question_string1, question_string2]
+}
+*/
+            //questions: value.questions
             // questions is [{'category': [question_string1, question_string2]}]
-          });
+          //});
+          console.log('this.state.GeneralQuestions: ' + that.state['GeneralQuestions'])
 
       }).catch(function(err) {
           // This code runs if there were any errors
           console.log(err);
       });
-    }
-    if (this.state.viewState === 'edit') {
-      console.log('do something for edit view')
-    }
+   // }
+   // if (this.state.viewState === 'edit') {
+   //   console.log('do something for edit view')
+   // }
   }
 
   render() {
@@ -128,6 +150,7 @@ class Child extends Component {
         this.setState({
           viewState: 'edit'
         })
+        
         console.log('got to edit-link')
         break;
       case 'delete-link':
@@ -317,20 +340,29 @@ class Child extends Component {
    */
   isChecked(category, question) {
     let checked = false;
+    let categTrimMiddle = category.split(' ').join('');
 
-    for (let i = 0; i < this.state.questions.length; i++) {
-      //console.log('Object.keys(this.state.questions[i]): ' + Object.keys(this.state.questions[i]));
-      //console.log('category: ' + category);
-      let categTrimMiddle = category.split(' ').join('');
-      if (Object.keys(this.state.questions[i]).indexOf(categTrimMiddle) > -1) {
-        if (this.state.questions[i][categTrimMiddle].indexOf(question) > -1) {
-          return true;
-        } else {
-          return checked;
-        }
-        break;
-      }
+    console.log('GeneralQuestions: ' + this.state['GeneralQuestions']);
+
+    console.log('categTrimMiddle: ' + categTrimMiddle);
+    console.log('this.state[categTrimMiddle]: ' + this.state[categTrimMiddle]);
+
+    if (this.state[categTrimMiddle].indexOf(question) > -1) {
+      return true;
     }
+
+    // for (let i = 0; i < this.state[categTrimMiddle].length; i++) {
+    //   //console.log('Object.keys(this.state.questions[i]): ' + Object.keys(this.state.questions[i]));
+    //   //console.log('category: ' + category);
+    //   if (Object.keys(this.state[categTrimMiddle][i]).indexOf(categTrimMiddle) > -1) {
+    //     if (this.state[categTrimMiddle][i].indexOf(question) > -1) {
+    //       return true;
+    //     } else {
+    //       return checked;
+    //     }
+    //     break;
+    //   }
+    // }
     return checked;
   }
 

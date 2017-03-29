@@ -32,7 +32,7 @@ export function getRandomIndexList(listId, count) {
  * between (min : max - 1)
  * src: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random#Getting_a_random_integer_between_two_values
  */
-function getRandomInt(min, max) {
+export function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min;
@@ -55,3 +55,33 @@ function getTotalQuestions(listId) {
 
   return total;
 }
+
+/**
+ * @param {} 
+ * @return {[string]} array of concatenated strings for categories
+ * ['GeneralQuestions', 'HTMLQuestions', ...]
+ * 
+ */
+export function getCategoriesList() {
+  let categList = [];
+  const allQuestionObjList = h5bp_interview.questions;
+
+  allQuestionObjList.forEach((obj) => {
+    categList.push(obj["category"]);
+  })
+
+  return categList;
+}
+
+/**
+ * @param {string} category string
+ * @return {string} with space inbetween words trimmed
+ * ex 'GeneralQuestions'
+ */
+export function shortCategory(categ) {
+  let shortCateg;
+
+  shortCateg = categ.split(' ').join('');
+  return shortCateg;
+}
+

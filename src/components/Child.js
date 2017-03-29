@@ -107,24 +107,18 @@ class Child extends Component {
    * update state which tracks all currently checked questions
    */
   handleViewMenu(e) {
-    console.log('got to handleViewMenu');
-    console.log('e.target.id: ' + e.target.id);
     switch(e.target.id) {
       case 'edit-link':
         this.setState({
           viewState: 'edit'
         })
-        
-        console.log('got to edit-link')
         break;
       case 'delete-link':
-        console.log('got to delete-link')
         break;
       case 'read-link':
         this.setState({
           viewState: 'read'
         })
-        console.log('got to read-link')
         break;
       default:
         break;
@@ -146,9 +140,6 @@ class Child extends Component {
     let questionsAr = [];
     let questionsObj = {};
     let questionIdx;
-
-    //console.log('shortCategory: ' + shortCategory);
-    //console.log('question: ' + question);
 
     if (e.target.checked) {
       //add question to array
@@ -174,14 +165,10 @@ class Child extends Component {
    * Event handler for button click (Get Random Questions)
    */
   handleSaveButton(e) {
-    console.log('clicked Save');
-    //const listNameInput = document.getElementById('list-name-inp');
     var listObj = {};
     let questionsAr = [];
     let db;
     const key = this.state.key;
-
-    // console.log('listNameInput.value: ' + listNameInput.value)
 
     CATEGORIES.forEach((categ) => {
       let categObj = {};
@@ -192,12 +179,9 @@ class Child extends Component {
     listObj.name = this.state.name;
     listObj.questions = questionsAr;
 
-//TODO 032717 need to update this to update an existing entry (this is probably creating a new one)
     localforage.setItem(key, listObj).then(function(value) {
-      console.log('update list');
     }).catch(function(err) {
       // This code runs if there were any errors
-      console.log(err);
     });
 
   }
@@ -246,26 +230,6 @@ class Child extends Component {
         ) 
     });
 
-
-
-
-
-    // //console.log('renderRandomQuestions');
-    // var randomIdxList;
-    // var questionsList = h5bp_interview.questions.map((questionSet, idx) => {
-    //   //randomIdxList = getRandomIndexList(questionSet.id, this.state[questionSet.id]);
-    //   var editQuestions = this.renderQuestions(idx);
-    //   //console.log('randomIdxList: ' + randomIdxList);
-    //   return (
-    //     <div>
-    //       <h4>{questionSet.category}</h4>
-    //       <ul>
-    //         {editQuestions}
-    //       </ul>
-    //     </div>
-    //   )
-    // });
-
     return questionsList;
   }
 
@@ -277,16 +241,6 @@ class Child extends Component {
    */
   renderQuestions(idxCategory) {
     var list;
-    console.log('idxCategory: ' + idxCategory);
-    //console.log('idxList: ' + idxList);
-    //if (idxList) {
-      // list = idxList.map((idx) => {
-      //   return (
-      //     <li key={uuid.v1()}>{h5bp_interview.questions[idxCategory].question_list[idx]}</li>
-      //   )
-      // })
-    //}
-
     return list;
   }
 
@@ -303,43 +257,12 @@ class Child extends Component {
     let checked = false;
     let categTrimMiddle = category.split(' ').join('');
 
-    console.log('GeneralQuestions: ' + this.state['GeneralQuestions']);
-
-    console.log('categTrimMiddle: ' + categTrimMiddle);
-    console.log('this.state[categTrimMiddle]: ' + this.state[categTrimMiddle]);
-
     if (this.state[categTrimMiddle].indexOf(question) > -1) {
       return true;
     }
 
-    // for (let i = 0; i < this.state[categTrimMiddle].length; i++) {
-    //   //console.log('Object.keys(this.state.questions[i]): ' + Object.keys(this.state.questions[i]));
-    //   //console.log('category: ' + category);
-    //   if (Object.keys(this.state[categTrimMiddle][i]).indexOf(categTrimMiddle) > -1) {
-    //     if (this.state[categTrimMiddle][i].indexOf(question) > -1) {
-    //       return true;
-    //     } else {
-    //       return checked;
-    //     }
-    //     break;
-    //   }
-    // }
     return checked;
   }
-
-  /**
-   * @param {}
-   * @return {}
-   *
-   */
-  // getMaxCountObj() {
-  //   var maxQuestionsObj = {};
-
-  //   h5bp_interview.questions.forEach(function(questionType) {
-  //     maxQuestionsObj[questionType.id] = questionType.question_list.length;
-  //   });
-  //   return maxQuestionsObj;
-  // }
 
   /*
    * @param {string}
@@ -349,12 +272,7 @@ class Child extends Component {
   concatCategory(categAr) {
     let resultStr;
 
-    // console.log('keys categStr: ' + Object.keys(categStr));
-    // console.log('categStr[0]: ' + categStr[0]);
-    // console.log('categStr[1]: ' + categStr[1]);
-    // console.log('type categStr: ' + typeof categStr);
     resultStr = categAr[0] + categAr[1];
-
     return resultStr;
   }
 

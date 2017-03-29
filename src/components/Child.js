@@ -241,7 +241,6 @@ class Child extends Component {
    */
   renderQuestions(idxCategory) {
     var list;
-
     return list;
   }
 

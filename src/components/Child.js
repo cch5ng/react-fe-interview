@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { Button, FormGroup, Checkbox, ControlLabel, FormControl } from 'react-bootstrap';
 import uuid from 'node-uuid';
 import localforage from 'localforage';
-//import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-//import {  } from 'react-bootstrap';
+import createHistory from 'history/createBrowserHistory'
 import '../App.css';
 import h5bp_interview from '../utilities/h5bp_interview.json';
 import { CATEGORIES } from '../utilities/constants';
@@ -36,7 +35,7 @@ class Child extends Component {
     // this.removeArrayItem = this.removeArrayItem.bind(this);
     this.handleViewMenu = this.handleViewMenu.bind(this);
     this.isChecked = this.isChecked.bind(this);
-
+    this.handleRemoveList = this.handleRemoveList.bind(this);
     // var maxQuestionsObj = this.getMaxCountObj();
     // maxQuestionsObj.display = 'all';
     // this.state = maxQuestionsObj;
@@ -90,7 +89,7 @@ class Child extends Component {
       <div>
         <h3>{this.state.name} List</h3>
           <div>
-            {this.state.viewState === 'read' ? <div className="right" onClick={this.handleViewMenu}><span id="edit-link">Edit</span> | <span id="delete-link">Delete</span></div> : <div className="right" onClick={this.handleViewMenu}><span id="read-link">Read</span> | <span id="delete-link">Delete</span></div>}
+            {this.state.viewState === 'read' ? <div className="right" onClick={this.handleViewMenu}><span id="edit-link">Edit</span> | <span id="delete-link" onClick={this.handleViewMenu}>Delete</span></div> : <div className="right" onClick={this.handleViewMenu}><span id="read-link">Read</span> | <span id="delete-link" onClick={this.handleViewMenu}>Delete</span></div>}
             {this.state.viewState === 'edit' ? <Button className="button" onClick={this.handleSaveButton}>Save List</Button> : null}
             {this.state.viewState === 'read' ? questionsList : this.renderEditQuestions()}
             {this.state.viewState === 'edit' ? <Button className="button" onClick={this.handleSaveButton}>Save List</Button> : null}
@@ -114,6 +113,8 @@ class Child extends Component {
         })
         break;
       case 'delete-link':
+        console.log('clicked delete menu');
+        this.handleRemoveList();
         break;
       case 'read-link':
         this.setState({
@@ -182,6 +183,40 @@ class Child extends Component {
     localforage.setItem(key, listObj).then(function(value) {
     }).catch(function(err) {
       // This code runs if there were any errors
+    });
+
+  }
+
+  /**
+   * @param {}
+   * @return {}
+   *
+   *
+   */
+  handleRemoveList() {
+    const keyRemove = this.listId;
+    let that = this;
+
+    localforage.removeItem(keyRemove).then(function() {
+        var savedLists = [];
+        var renderSavedLists = [];
+
+        localforage.iterate(function(value, key, iterationNumber) {
+            savedLists.push([key, value]);
+        }).then(function() {
+            console.log('list deleted');
+            const history = createHistory();
+            history.push('/favorites');
+            // need reload latest lists content
+            window.location.reload();
+        }).catch(function(err) {
+            // This code runs if there were any errors
+            console.log(err);
+        });
+
+    }).catch(function(err) {
+        // This code runs if there were any errors
+        console.log(err);
     });
 
   }

@@ -83,21 +83,14 @@ class Favorites extends Component {
    *
    */
   handleRemoveList(e) {
-    console.log('clicked remove icon');
-    console.log('e.target.id: ' + e.target.id);
     const keyRemove = e.target.id;
     let that = this;
 
     localforage.removeItem(keyRemove).then(function() {
-        // Run this code once the key has been removed.
-        console.log('Key is cleared!');
-
         var savedLists = [];
         var renderSavedLists = [];
 
-        // The same code, but using ES6 Promises.
         localforage.iterate(function(value, key, iterationNumber) {
-
             savedLists.push([key, value]);
         }).then(function() {
             renderSavedLists = savedLists.map((list) => {

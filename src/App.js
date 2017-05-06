@@ -125,6 +125,7 @@ class App extends Component {
                 <NavItem><Link to="/" className="nav-a">Random</Link></NavItem>
                 <NavItem><Link to="/all" className="nav-a">All Questions</Link></NavItem>
                 <NavItem><Link to="/favorites" className="nav-a">Favorites</Link></NavItem>
+                <NavItem><a href="https://github.com/cch5ng/react-fe-interview" className="nav-a"><i className="fa fa-github fa-lg" aria-hidden="true"></i></a></NavItem>
                 <NavItem><i className="fa fa-search fa-lg" onClick={this.handleSearch} aria-hidden="true"></i></NavItem>
               </Nav>
             </Navbar.Collapse>

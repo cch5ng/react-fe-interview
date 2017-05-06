@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
 import uuid from 'node-uuid';
 import localforage from 'localforage';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import './App.css';
 import h5bp_interview from './utilities/h5bp_interview.json';
@@ -25,6 +25,7 @@ class App extends Component {
     this.handleSearch = this.handleSearch.bind(this);
     this.handleSearchLink = this.handleSearchLink.bind(this);
     this.handleSearchFilter = this.handleSearchFilter.bind(this);
+    this.handleGithubLink = this.handleGithubLink.bind(this);
 
     var maxQuestionsObj = this.getMaxCountObj();
     maxQuestionsObj.display = 'all';
@@ -125,6 +126,7 @@ class App extends Component {
                 <NavItem><Link to="/" className="nav-a">Random</Link></NavItem>
                 <NavItem><Link to="/all" className="nav-a">All Questions</Link></NavItem>
                 <NavItem><Link to="/favorites" className="nav-a">Favorites</Link></NavItem>
+                <NavItem class="a-github" onClick={this.handleGithubLink}><i className="fa fa-github fa-lg" aria-hidden="true"></i></NavItem>
                 <NavItem><i className="fa fa-search fa-lg" onClick={this.handleSearch} aria-hidden="true"></i></NavItem>
               </Nav>
             </Navbar.Collapse>
@@ -215,6 +217,20 @@ class App extends Component {
     this.handleSearch();
     window.location.reload();
   }
+
+  /**
+   * @param {}
+   * @return {}
+   * Event handler for button click (All Questions)
+   * 
+   * 
+   */
+  handleGithubLink() {
+    console.log('clicked github');
+    window.open('https://github.com/cch5ng/react-fe-interview');
+    //window.location.reload();
+  }
+
 
   /**
    * @param {}
